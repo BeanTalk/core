@@ -5,7 +5,6 @@
  */
 package com.saituo.talk.common.persistence;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -22,21 +21,10 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
-import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.Sort;
-import org.apache.lucene.search.highlight.Formatter;
-import org.apache.lucene.search.highlight.Highlighter;
-import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
-import org.apache.lucene.search.highlight.QueryScorer;
-import org.apache.lucene.search.highlight.SimpleFragmenter;
-import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
-import org.apache.lucene.util.Version;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -56,7 +44,6 @@ import org.hibernate.search.query.ObjectLookupMethod;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.saituo.talk.common.utils.Reflections;
 import com.saituo.talk.common.utils.StringUtils;
@@ -134,8 +121,7 @@ public class BaseDao<T> {
 	public <E> Page<E> find(Page<E> page, String qlString, Parameter parameter) {
 		// get count
 		if (!page.isDisabled() && !page.isNotCount()) {
-			String countQlString = "select count(*) "
-					+ removeSelect(removeOrders(qlString));
+			String countQlString = "select count(*) " + removeSelect(removeOrders(qlString));
 			// page.setCount(Long.valueOf(createQuery(countQlString,
 			// parameter).uniqueResult().toString()));
 			Query query = createQuery(countQlString, parameter);
@@ -316,8 +302,7 @@ public class BaseDao<T> {
 	 * @return
 	 */
 	public int deleteById(Serializable id) {
-		return update("update " + entityClass.getSimpleName()
-				+ " set delFlag='" + BaseEntity.DEL_FLAG_DELETE
+		return update("update " + entityClass.getSimpleName() + " set delFlag='" + BaseEntity.DEL_FLAG_DELETE
 				+ "' where id = :p1", new Parameter(id));
 	}
 
@@ -329,10 +314,8 @@ public class BaseDao<T> {
 	 * @return
 	 */
 	public int deleteById(Serializable id, String likeParentIds) {
-		return update("update " + entityClass.getSimpleName()
-				+ " set delFlag = '" + BaseEntity.DEL_FLAG_DELETE
-				+ "' where id = :p1 or parentIds like :p2", new Parameter(id,
-				likeParentIds));
+		return update("update " + entityClass.getSimpleName() + " set delFlag = '" + BaseEntity.DEL_FLAG_DELETE
+				+ "' where id = :p1 or parentIds like :p2", new Parameter(id, likeParentIds));
 	}
 
 	/**
@@ -343,8 +326,7 @@ public class BaseDao<T> {
 	 * @return
 	 */
 	public int updateDelFlag(Serializable id, String delFlag) {
-		return update("update " + entityClass.getSimpleName()
-				+ " set delFlag = :p2 where id = :p1", new Parameter(id,
+		return update("update " + entityClass.getSimpleName() + " set delFlag = :p2 where id = :p1", new Parameter(id,
 				delFlag));
 	}
 
@@ -382,8 +364,7 @@ public class BaseDao<T> {
 	 * @param parameter
 	 * @return
 	 */
-	public <E> Page<E> findBySql(Page<E> page, String sqlString,
-			Parameter parameter) {
+	public <E> Page<E> findBySql(Page<E> page, String sqlString, Parameter parameter) {
 		return findBySql(page, sqlString, parameter, null);
 	}
 
@@ -395,8 +376,7 @@ public class BaseDao<T> {
 	 * @param resultClass
 	 * @return
 	 */
-	public <E> Page<E> findBySql(Page<E> page, String sqlString,
-			Class<?> resultClass) {
+	public <E> Page<E> findBySql(Page<E> page, String sqlString, Class<?> resultClass) {
 		return findBySql(page, sqlString, null, resultClass);
 	}
 
@@ -410,12 +390,10 @@ public class BaseDao<T> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public <E> Page<E> findBySql(Page<E> page, String sqlString,
-			Parameter parameter, Class<?> resultClass) {
+	public <E> Page<E> findBySql(Page<E> page, String sqlString, Parameter parameter, Class<?> resultClass) {
 		// get count
 		if (!page.isDisabled() && !page.isNotCount()) {
-			String countSqlString = "select count(*) "
-					+ removeSelect(removeOrders(sqlString));
+			String countSqlString = "select count(*) " + removeSelect(removeOrders(sqlString));
 			// page.setCount(Long.valueOf(createSqlQuery(countSqlString,
 			// parameter).uniqueResult().toString()));
 			Query query = createSqlQuery(countSqlString, parameter);
@@ -475,8 +453,7 @@ public class BaseDao<T> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public <E> List<E> findBySql(String sqlString, Parameter parameter,
-			Class<?> resultClass) {
+	public <E> List<E> findBySql(String sqlString, Parameter parameter, Class<?> resultClass) {
 		SQLQuery query = createSqlQuery(sqlString, parameter);
 		setResultTransformer(query, resultClass);
 		return query.list();
@@ -567,8 +544,7 @@ public class BaseDao<T> {
 	 * @return
 	 */
 	private String removeOrders(String qlString) {
-		Pattern p = Pattern.compile("order\\s*by[\\w|\\W|\\s|\\S]*",
-				Pattern.CASE_INSENSITIVE);
+		Pattern p = Pattern.compile("order\\s*by[\\w|\\W|\\s|\\S]*", Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(qlString);
 		StringBuffer sb = new StringBuffer();
 		while (m.find()) {
@@ -610,8 +586,7 @@ public class BaseDao<T> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public Page<T> find(Page<T> page, DetachedCriteria detachedCriteria,
-			ResultTransformer resultTransformer) {
+	public Page<T> find(Page<T> page, DetachedCriteria detachedCriteria, ResultTransformer resultTransformer) {
 		// get count
 		if (!page.isDisabled() && !page.isNotCount()) {
 			page.setCount(count(detachedCriteria));
@@ -619,8 +594,7 @@ public class BaseDao<T> {
 				return page;
 			}
 		}
-		Criteria criteria = detachedCriteria
-				.getExecutableCriteria(getSession());
+		Criteria criteria = detachedCriteria.getExecutableCriteria(getSession());
 		criteria.setResultTransformer(resultTransformer);
 		// set page
 		if (!page.isDisabled()) {
@@ -664,10 +638,8 @@ public class BaseDao<T> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<T> find(DetachedCriteria detachedCriteria,
-			ResultTransformer resultTransformer) {
-		Criteria criteria = detachedCriteria
-				.getExecutableCriteria(getSession());
+	public List<T> find(DetachedCriteria detachedCriteria, ResultTransformer resultTransformer) {
+		Criteria criteria = detachedCriteria.getExecutableCriteria(getSession());
 		criteria.setResultTransformer(resultTransformer);
 		return criteria.list();
 	}
@@ -680,8 +652,7 @@ public class BaseDao<T> {
 	 */
 	@SuppressWarnings("rawtypes")
 	public long count(DetachedCriteria detachedCriteria) {
-		Criteria criteria = detachedCriteria
-				.getExecutableCriteria(getSession());
+		Criteria criteria = detachedCriteria.getExecutableCriteria(getSession());
 		long totalCount = 0;
 		try {
 			// Get orders
@@ -754,17 +725,14 @@ public class BaseDao<T> {
 	 * @return 分页对象
 	 */
 	@SuppressWarnings("unchecked")
-	public Page<T> search(Page<T> page, BooleanQuery query,
-			BooleanQuery queryFilter, Sort sort) {
+	public Page<T> search(Page<T> page, BooleanQuery query, BooleanQuery queryFilter, Sort sort) {
 
 		// 按关键字查询
-		FullTextQuery fullTextQuery = getFullTextSession().createFullTextQuery(
-				query, entityClass);
+		FullTextQuery fullTextQuery = getFullTextSession().createFullTextQuery(query, entityClass);
 
 		// 过滤无效的内容
 		if (queryFilter != null) {
-			fullTextQuery.setFilter(new CachingWrapperFilter(
-					new QueryWrapperFilter(queryFilter)));
+			fullTextQuery.setFilter(new CachingWrapperFilter(new QueryWrapperFilter(queryFilter)));
 		}
 
 		// 设置排序
@@ -778,9 +746,7 @@ public class BaseDao<T> {
 		fullTextQuery.setMaxResults(page.getMaxResults());
 
 		// 先从持久化上下文中查找对象，如果没有再从二级缓存中查找
-		fullTextQuery.initializeObjectsWith(
-				ObjectLookupMethod.SECOND_LEVEL_CACHE,
-				DatabaseRetrievalMethod.QUERY);
+		fullTextQuery.initializeObjectsWith(ObjectLookupMethod.SECOND_LEVEL_CACHE, DatabaseRetrievalMethod.QUERY);
 
 		// 返回结果
 		page.setList(fullTextQuery.list());
@@ -799,73 +765,4 @@ public class BaseDao<T> {
 		return booleanQuery;
 	}
 
-	/**
-	 * 获取全文查询对象
-	 * 
-	 * @param q
-	 *            查询关键字
-	 * @param fields
-	 *            查询字段
-	 * @return 全文查询对象
-	 */
-	public BooleanQuery getFullTextQuery(String q, String... fields) {
-		Analyzer analyzer = new IKAnalyzer();
-		BooleanQuery query = new BooleanQuery();
-		try {
-			if (StringUtils.isNotBlank(q)) {
-				for (String field : fields) {
-					QueryParser parser = new QueryParser(Version.LUCENE_36,
-							field, analyzer);
-					query.add(parser.parse(q), Occur.SHOULD);
-				}
-			}
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return query;
-	}
-
-	/**
-	 * 设置关键字高亮
-	 * 
-	 * @param query
-	 *            查询对象
-	 * @param list
-	 *            设置高亮的内容列表
-	 * @param subLength
-	 *            截取长度
-	 * @param fields
-	 *            字段名
-	 */
-	public List<T> keywordsHighlight(BooleanQuery query, List<T> list,
-			int subLength, String... fields) {
-		Analyzer analyzer = new IKAnalyzer();
-		Formatter formatter = new SimpleHTMLFormatter(
-				"<span class=\"highlight\">", "</span>");
-		Highlighter highlighter = new Highlighter(formatter, new QueryScorer(
-				query));
-		highlighter.setTextFragmenter(new SimpleFragmenter(subLength));
-		for (T entity : list) {
-			try {
-				for (String field : fields) {
-					String text = StringUtils.replaceHtml((String) Reflections
-							.invokeGetter(entity, field));
-					String description = highlighter.getBestFragment(analyzer,
-							field, text);
-					if (description != null) {
-						Reflections
-								.invokeSetter(entity, fields[0], description);
-						break;
-					}
-					Reflections.invokeSetter(entity, fields[0],
-							StringUtils.abbr(text, subLength * 2));
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (InvalidTokenOffsetsException e) {
-				e.printStackTrace();
-			}
-		}
-		return list;
-	}
 }

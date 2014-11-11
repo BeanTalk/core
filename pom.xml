@@ -4,11 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.beantalk.saituo</groupId>
-	<artifactId>saituo</artifactId>
+	<artifactId>core</artifactId>
 	<version>1.0.0</version>
 	<packaging>war</packaging>
-	<name>saituo</name>
-	<url>http://www.saituo.com/index.html</url>
+	<name>core</name>
 
 	<!-- 项目属性 -->
 	<properties>
@@ -54,11 +53,6 @@
 	<!-- 设定除中央仓库(repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查找. -->
 	<repositories>
 
-		<!-- 如有Nexus私服, 取消注释并指向正确的服务器地址. <repository> <id>nexus-repos</id> <name>Team 
-			Nexus Repository</name> <url>http://localhost:8081/nexus/content/groups/public</url> 
-			<releases> <enabled>true</enabled> </releases> <snapshots> <enabled>false</enabled> 
-			</snapshots> </repository> -->
-
 		<repository>
 			<id>central-repos</id>
 			<name>Central Repository</name>
@@ -100,52 +94,9 @@
 		</repository>
 
 	</repositories>
-	<pluginRepositories>
-
-		<!-- 如有Nexus私服, 取消注释并指向正确的服务器地址. <pluginRepository> <id>nexus-repos</id> 
-			<name>Team Nexus Repository</name> <url>http://localhost:8081/nexus/content/groups/public</url> 
-			<releases> <enabled>true</enabled> </releases> <snapshots> <enabled>false</enabled> 
-			</snapshots> </pluginRepository> -->
-
-	</pluginRepositories>
 
 	<!-- 依赖项定义 -->
 	<dependencies>
-		<!-- ERMaster begin -->
-		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>swt</artifactId>
-			<version>3.3.0-v3346</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>draw2d</artifactId>
-			<version>3.2.100-v20070529</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>jface</artifactId>
-			<version>3.3.0-I20070606-0010</version>
-		</dependency>
-		<dependency>
-			<groupId>org.insightech.er</groupId>
-			<artifactId>ERMaster</artifactId>
-			<version>20121127-2328</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/org.insightech.er_1.0.0.v20121127-2328.jar</systemPath>
-		</dependency>
-		<!-- ERMaster end -->
-		<dependency>
-			<groupId>bitwalker</groupId>
-			<artifactId>UserAgentUtils</artifactId>
-			<version>1.13</version>
-		</dependency>
-		<dependency>
-			<groupId>org.zeroturnaround</groupId>
-			<artifactId>zt-zip</artifactId>
-			<version>1.6</version>
-			<type>jar</type>
-		</dependency>
 
 		<!-- Redis -->
 		<dependency>
@@ -161,9 +112,16 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.crazycake</groupId>
-			<artifactId>shiro-redis</artifactId>
-			<version>2.4.2.1-RELEASE</version>
+			<groupId>bitwalker</groupId>
+			<artifactId>UserAgentUtils</artifactId>
+			<version>1.13</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.zeroturnaround</groupId>
+			<artifactId>zt-zip</artifactId>
+			<version>1.6</version>
+			<type>jar</type>
 		</dependency>
 
 		<!-- SPRING begin -->
@@ -282,13 +240,6 @@
 			<version>${mybatis-spring.version}</version>
 		</dependency>
 
-		<!-- 中文分词 -->
-		<dependency>
-			<groupId>org.wltea</groupId>
-			<artifactId>analyzer</artifactId>
-			<version>2012_u6</version>
-		</dependency>
-
 		<!-- connection pool -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
@@ -359,6 +310,7 @@
 			<artifactId>ehcache-core</artifactId>
 			<version>${ehcache.version}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache-web</artifactId>
@@ -519,6 +471,7 @@
 			<artifactId>mail</artifactId>
 			<version>1.4.7</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>javax.activation</groupId>
 			<artifactId>activation</artifactId>
@@ -531,11 +484,13 @@
 			<artifactId>poi</artifactId>
 			<version>${poi.version}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>${poi.version}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml-schemas</artifactId>
