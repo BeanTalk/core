@@ -9,9 +9,10 @@
 		
 	<cacheManagerPeerProviderFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
 		properties="peerDiscovery=automatic,multicastGroupAddress=230.0.0.1, multicastGroupPort=4446" />
+		
 	<cacheManagerPeerListenerFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory" />
 
-	<diskStore path="java.io.tmpdir/jeesite/ehcache/default" />
+	<diskStore path="java.io.tmpdir/saituo/ehcache/default" />
 
 	<!-- DefaultCache setting. -->
 	<defaultCache maxEntriesLocalHeap="100" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="600"
@@ -22,10 +23,6 @@
 	
 	<!-- Special objects setting. -->
 	<cache name="sysCache" maxElementsInMemory="100" eternal="true" overflowToDisk="true">
-		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"/>
-    </cache>
-    
-	<cache name="cmsCache" maxElementsInMemory="100" eternal="true" overflowToDisk="true">
 		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"/>
     </cache>
 	    

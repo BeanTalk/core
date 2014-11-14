@@ -94,6 +94,7 @@ CREATE TABLE sys_menu
 	id varchar(64) NOT NULL COMMENT '编号',
 	parent_id varchar(64) NOT NULL COMMENT '父级编号',
 	parent_ids varchar(2000) NOT NULL COMMENT '所有父级编号',
+	module varchar(200) NOT NULL COMMENT '所属模块',
 	name varchar(100) NOT NULL COMMENT '菜单名称',
 	href varchar(255) COMMENT '链接',
 	target varchar(20) COMMENT '目标',

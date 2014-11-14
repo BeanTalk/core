@@ -48,6 +48,14 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label" for="type">菜单类型:</label>
+			<div class="controls">
+				<form:select path="type">
+					<form:options items="${fns:getDictList('sys_menu_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label" for="target">目标:</label>
 			<div class="controls">
 				<form:input path="target" htmlEscape="false" maxlength="10"/>

@@ -127,7 +127,7 @@ public class UserUtils extends BaseService {
 		@SuppressWarnings("unchecked")
 		List<Area> areaList = (List<Area>) getCache(CACHE_AREA_LIST);
 		if (areaList == null) {
-			// User user = getUser();
+			 User user = getUser();
 			// if (user.isAdmin()){
 			areaList = areaDao.findAllList();
 			// }else{
