@@ -26,7 +26,7 @@
 </head>
 <body>
 	<div class="accordion" id="menu">
-	<c:set var="menuList" value="${fns:getMenuList()}"/>
+	<c:set var="menuList" value="${fns:getSysMenuList()}"/>
 	<c:set var="firstMenu" value="true"/>
 	<c:forEach items="${menuList}" var="menu" varStatus="idxStatus">
 		<c:if test="${menu.parent.id eq (not empty param.parentId?param.parentId:'1')&&menu.isShow eq '1'}">

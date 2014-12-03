@@ -51,6 +51,7 @@ public class UserUtils extends BaseService {
 	public static final String CACHE_USER = "user";
 	public static final String CACHE_ROLE_LIST = "roleList";
 	public static final String CACHE_MENU_LIST = "menuList";
+	public static final String CACHE_SYS_MENU_LIST = "sysmenuList";
 	public static final String CACHE_AREA_LIST = "areaList";
 	public static final String CACHE_OFFICE_LIST = "officeList";
 
@@ -106,6 +107,21 @@ public class UserUtils extends BaseService {
 			putCache(CACHE_ROLE_LIST, list);
 		}
 		return list;
+	}
+	
+	public static List<Menu> getSysMenuList(){
+		@SuppressWarnings("unchecked")
+		List<Menu> menuList = (List<Menu>) getCache(CACHE_SYS_MENU_LIST);
+		if (menuList == null) {
+			User user = getUser();
+			if (user.isAdmin()) {
+				menuList = menuDao.findSysModuleAllList();
+			} else {
+				menuList = menuDao.findByUserId(user.getId());
+			}
+			putCache(CACHE_SYS_MENU_LIST, menuList);
+		}
+		return menuList;
 	}
 
 	public static List<Menu> getMenuList() {

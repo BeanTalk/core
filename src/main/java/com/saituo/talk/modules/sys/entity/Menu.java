@@ -7,6 +7,7 @@ package com.saituo.talk.modules.sys.entity;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -121,6 +122,7 @@ public class Menu extends IdEntity<Menu> {
 	}
 
 	@Length(min = 0, max = 64)
+	@Column(name = "module")
 	public String getModule() {
 		return module;
 	}

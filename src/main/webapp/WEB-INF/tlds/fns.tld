@@ -58,10 +58,10 @@
   
   <function>
     <description>获取当前用户的菜单对象列表</description>
-    <name>getMenuList</name>
+    <name>getSysMenuList</name>
     <function-class>com.saituo.talk.modules.sys.utils.UserUtils</function-class>
-    <function-signature>java.util.List getMenuList()</function-signature>
-    <example>${fns:getMenuList()}</example>  
+    <function-signature>java.util.List getSysMenuList()</function-signature>
+    <example>${fns:getSysMenuList()}</example>  
   </function>
   
   <function>
