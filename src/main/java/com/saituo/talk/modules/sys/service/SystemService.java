@@ -57,12 +57,6 @@ public class SystemService extends BaseService {
 		User currentUser = UserUtils.getUser();
 		DetachedCriteria dc = userDao.createDetachedCriteria();
 
-		dc.createAlias("company", "company");
-		if (user.getCompany() != null && StringUtils.isNotBlank(user.getCompany().getId())) {
-			dc.add(Restrictions.or(Restrictions.eq("company.id", user.getCompany().getId()),
-					Restrictions.like("company.parentIds", "%," + user.getCompany().getId() + ",%")));
-		}
-
 		dc.createAlias("office", "office");
 		if (user.getOffice() != null && StringUtils.isNotBlank(user.getOffice().getId())) {
 			dc.add(Restrictions.or(Restrictions.eq("office.id", user.getOffice().getId()),
@@ -85,7 +79,7 @@ public class SystemService extends BaseService {
 
 		dc.add(Restrictions.eq(User.FIELD_DEL_FLAG, User.DEL_FLAG_NORMAL));
 		if (!StringUtils.isNotEmpty(page.getOrderBy())) {
-			dc.addOrder(Order.asc("company.code")).addOrder(Order.asc("office.code")).addOrder(Order.desc("name"));
+			dc.addOrder(Order.asc("office.code")).addOrder(Order.desc("name"));
 		}
 
 		return userDao.find(page, dc);

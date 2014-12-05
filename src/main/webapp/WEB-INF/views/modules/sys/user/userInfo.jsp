@@ -32,12 +32,6 @@
 	<form:form id="inputForm" modelAttribute="user" action="${ctx}/sys/user/info" method="post" class="form-horizontal">
 		<tags:message content="${message}"/>
 		<div class="control-group">
-			<label class="control-label">归属公司:</label>
-			<div class="controls">
-				<label class="lbl">${user.company.name}</label>
-			</div>
-		</div>
-		<div class="control-group">
 			<label class="control-label">归属部门:</label>
 			<div class="controls">
 				<label class="lbl">${user.office.name}</label>
@@ -71,12 +65,6 @@
 			<label class="control-label">备注:</label>
 			<div class="controls">
 				<form:textarea path="remarks" htmlEscape="false" rows="3" maxlength="200" class="input-xlarge"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">用户类型:</label>
-			<div class="controls">
-				<label class="lbl">${fns:getDictLabel(user.userType, 'sys_user_type', '无')}</label>
 			</div>
 		</div>
 		<div class="control-group">

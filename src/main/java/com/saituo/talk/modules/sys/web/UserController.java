@@ -74,9 +74,6 @@ public class UserController extends BaseController {
 	@RequiresPermissions("sys:user:view")
 	@RequestMapping("form")
 	public String form(User user, Model model) {
-		if (user.getCompany() == null || user.getCompany().getId() == null) {
-			user.setCompany(UserUtils.getUser().getCompany());
-		}
 		if (user.getOffice() == null || user.getOffice().getId() == null) {
 			user.setOffice(UserUtils.getUser().getOffice());
 		}
@@ -108,7 +105,6 @@ public class UserController extends BaseController {
 			HttpServletRequest request, Model model,
 			RedirectAttributes redirectAttributes) {
 
-		user.setCompany(new Office(request.getParameter("company.id")));
 		user.setOffice(new Office(request.getParameter("office.id")));
 
 		// 如果新密码为空，则不更换密码
