@@ -7,6 +7,7 @@ package com.saituo.talk.modules.sys.entity;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -48,11 +49,10 @@ public class Office extends IdEntity<Office> {
 	private Office parent; // 父级编号
 	private String parentIds; // 所有父级编号
 	private Area area; // 归属区域
-	private String code; // 机构编码
 	private String name; // 机构名称
 	private String type; // 机构类型（1：公司；2：部门；3：小组）
-	private String grade; // 机构等级（1：一级；2：二级；3：三级；4：四级）
 	private String address; // 联系地址
+	private String code; // 机构编码
 	private String zipCode; // 邮政编码
 	private String master; // 负责人
 	private String phone; // 电话
@@ -92,6 +92,15 @@ public class Office extends IdEntity<Office> {
 		this.parentIds = parentIds;
 	}
 
+	@Column(name = "code")
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
 	@ManyToOne
 	@JoinColumn(name = "area_id")
 	@NotFound(action = NotFoundAction.IGNORE)
@@ -120,15 +129,6 @@ public class Office extends IdEntity<Office> {
 
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	@Length(min = 1, max = 1)
-	public String getGrade() {
-		return grade;
-	}
-
-	public void setGrade(String grade) {
-		this.grade = grade;
 	}
 
 	@Length(min = 0, max = 255)
@@ -185,15 +185,6 @@ public class Office extends IdEntity<Office> {
 		this.email = email;
 	}
 
-	@Length(min = 0, max = 100)
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
 	@OneToMany(mappedBy = "office", fetch = FetchType.LAZY)
 	@Where(clause = "del_flag='" + DEL_FLAG_NORMAL + "'")
 	@OrderBy(value = "id")
@@ -210,7 +201,6 @@ public class Office extends IdEntity<Office> {
 
 	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
 	@Where(clause = "del_flag='" + DEL_FLAG_NORMAL + "'")
-	@OrderBy(value = "code")
 	@Fetch(FetchMode.SUBSELECT)
 	@NotFound(action = NotFoundAction.IGNORE)
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -223,18 +213,15 @@ public class Office extends IdEntity<Office> {
 	}
 
 	@Transient
-	public static void sortList(List<Office> list, List<Office> sourcelist,
-			String parentId) {
+	public static void sortList(List<Office> list, List<Office> sourcelist, String parentId) {
 		for (int i = 0; i < sourcelist.size(); i++) {
 			Office e = sourcelist.get(i);
-			if (e.getParent() != null && e.getParent().getId() != null
-					&& e.getParent().getId().equals(parentId)) {
+			if (e.getParent() != null && e.getParent().getId() != null && e.getParent().getId().equals(parentId)) {
 				list.add(e);
 				// 判断是否还有子节点, 有则继续获取子节点
 				for (int j = 0; j < sourcelist.size(); j++) {
 					Office child = sourcelist.get(j);
-					if (child.getParent() != null
-							&& child.getParent().getId() != null
+					if (child.getParent() != null && child.getParent().getId() != null
 							&& child.getParent().getId().equals(e.getId())) {
 						sortList(list, sourcelist, e.getId());
 						break;

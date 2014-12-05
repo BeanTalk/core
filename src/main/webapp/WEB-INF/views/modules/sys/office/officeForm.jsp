@@ -41,25 +41,11 @@
 				<form:input path="name" htmlEscape="false" maxlength="50" class="required"/>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label" for="code">机构编码:</label>
-			<div class="controls">
-				<form:input path="code" htmlEscape="false" maxlength="50"/>
-			</div>
-		</div>
-		<div class="control-group">
+		<div class="control-group" style="display: none">
 			<label class="control-label" for="type">机构类型:</label>
 			<div class="controls">
 				<form:select path="type">
 					<form:options items="${fns:getDictList('sys_office_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="grade">机构级别:</label>
-			<div class="controls">
-				<form:select path="grade">
-					<form:options items="${fns:getDictList('sys_office_grade')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</div>
 		</div>

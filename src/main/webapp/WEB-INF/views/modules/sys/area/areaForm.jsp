@@ -33,7 +33,7 @@
 				<form:input path="name" htmlEscape="false" maxlength="50" class="required"/>
 			</div>
 		</div>
-		<div class="control-group">
+		<div class="control-group" style="display: none">
 			<label class="control-label" for="code">区域编码:</label>
 			<div class="controls">
 				<form:input path="code" htmlEscape="false" maxlength="50"/>

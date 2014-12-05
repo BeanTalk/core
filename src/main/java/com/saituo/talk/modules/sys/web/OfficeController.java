@@ -87,8 +87,7 @@ public class OfficeController extends BaseController {
 
 	@RequiresPermissions("sys:office:edit")
 	@RequestMapping("save")
-	public String save(Office office, Model model,
-			RedirectAttributes redirectAttributes) {
+	public String save(Office office, Model model, RedirectAttributes redirectAttributes) {
 
 		if (!beanValidator(model, office)) {
 			return form(office, model);
@@ -114,34 +113,25 @@ public class OfficeController extends BaseController {
 	@RequiresUser
 	@ResponseBody
 	@RequestMapping("treeData")
-	public List<Map<String, Object>> treeData(HttpServletResponse response,
-			@RequestParam(required = false) Long extId,
-			@RequestParam(required = false) Long type,
-			@RequestParam(required = false) Long grade) {
+	public List<Map<String, Object>> treeData(HttpServletResponse response, @RequestParam(required = false) Long extId,
+			@RequestParam(required = false) Long type, @RequestParam(required = false) Long grade) {
 
 		response.setContentType("application/json; charset=UTF-8");
 		List<Map<String, Object>> mapList = Lists.newArrayList();
 
 		// User user = UserUtils.getUser();
 		List<Office> list = officeService.findAll();
-		
+
 		for (int i = 0; i < list.size(); i++) {
 			Office e = list.get(i);
 
-			if ((extId == null || (extId != null && !extId.equals(e.getId()) && e
-					.getParentIds().indexOf("," + extId + ",") == -1))
-					&& (type == null || (type != null && Integer.parseInt(e
-							.getType()) <= type.intValue()))
-					&& (grade == null || (grade != null && Integer.parseInt(e
-							.getGrade()) <= grade.intValue()))) {
+			if ((extId == null || (extId != null && !extId.equals(e.getId()) && e.getParentIds().indexOf(
+					"," + extId + ",") == -1))
+					&& (type == null || (type != null && Integer.parseInt(e.getType()) <= type.intValue()))) {
 
 				Map<String, Object> map = Maps.newHashMap();
 				map.put("id", e.getId());
-				// map.put("pId", !user.isAdmin() &&
-				// e.getId().equals(user.getOffice().getId())?0:e.getParent()!=null?e.getParent().getId():0);
-				map.put("pId", e.getParent() != null
-						? e.getParent().getId()
-						: 0);
+				map.put("pId", e.getParent() != null ? e.getParent().getId() : 0);
 				map.put("name", e.getName());
 				mapList.add(map);
 			}

@@ -118,7 +118,7 @@
 				<form:input path="name" htmlEscape="false" maxlength="50" class="required"/>
 			</div>
 		</div>
-		<div class="control-group">
+		<div class="control-group" style="display: none">
 			<label class="control-label">数据范围:</label>
 			<div class="controls">
 				<form:select path="dataScope">
