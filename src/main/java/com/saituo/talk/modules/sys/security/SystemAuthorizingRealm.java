@@ -41,7 +41,7 @@ import com.saituo.talk.modules.sys.web.LoginController;
  * @author ThinkGem
  * @version 2013-5-29
  */
-@DependsOn({"userDao", "roleDao", "menuDao"})
+@DependsOn({ "userDao", "roleDao", "menuDao" })
 public class SystemAuthorizingRealm extends AuthorizingRealm {
 
 	private SystemService systemService;
@@ -63,13 +63,14 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 		}
 
 		User user = getSystemService().getUserByLoginName(token.getUsername());
-		if (user != null) {
-			byte[] salt = Encodes.decodeHex(user.getPassword().substring(0, 16));
-			return new SimpleAuthenticationInfo(new Principal(user), user.getPassword().substring(16),
-					ByteSource.Util.bytes(salt), getName());
-		} else {
+
+		if (user == null) {
 			return null;
 		}
+
+		byte[] salt = Encodes.decodeHex(user.getPassword().substring(0, 16));
+		return new SimpleAuthenticationInfo(new Principal(user), user.getPassword().substring(16),
+				ByteSource.Util.bytes(salt), getName());
 	}
 
 	/**
@@ -77,26 +78,30 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+		
 		Principal principal = (Principal) getAvailablePrincipal(principals);
 		User user = getSystemService().getUserByLoginName(principal.getLoginName());
-		if (user != null) {
-			UserUtils.putCache("user", user);
-			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-			List<Menu> list = UserUtils.getMenuList();
-			for (Menu menu : list) {
-				if (StringUtils.isNotBlank(menu.getPermission())) {
-					// 添加基于Permission的权限信息
-					for (String permission : StringUtils.split(menu.getPermission(), ",")) {
-						info.addStringPermission(permission);
-					}
-				}
-			}
-			// 更新登录IP和时间
-			getSystemService().updateUserLoginInfo(user.getId());
-			return info;
-		} else {
+
+		if (user == null) {
 			return null;
 		}
+
+		// 更新登录IP和时间
+		getSystemService().updateUserLoginInfo(user.getId());
+
+		// 缓存当前用户信息并或者权限给shiro
+		UserUtils.putCache("user", user);
+		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+		List<Menu> list = UserUtils.getMenuList();
+		for (Menu menu : list) {
+			if (StringUtils.isNotBlank(menu.getPermission())) {
+				// 添加基于Permission的权限信息
+				for (String permission : StringUtils.split(menu.getPermission(), ",")) {
+					info.addStringPermission(permission);
+				}
+			}
+		}
+		return info;
 	}
 
 	/**

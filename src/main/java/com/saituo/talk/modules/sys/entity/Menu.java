@@ -7,6 +7,7 @@ package com.saituo.talk.modules.sys.entity;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -53,6 +54,7 @@ public class Menu extends IdEntity<Menu> {
 	private String href; // 链接
 	private String target; // 目标（ mainFrame、_blank、_self、_parent、_top）
 	private String icon; // 图标
+	private String type; // 菜单类型
 	private Integer sort; // 排序
 	private String isShow; // 是否在菜单中显示（1：显示；0：不显示）
 	private String permission; // 权限标识
@@ -101,6 +103,15 @@ public class Menu extends IdEntity<Menu> {
 		this.name = name;
 	}
 
+	@Length(min = 1, max = 100)
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	@Length(min = 0, max = 255)
 	public String getHref() {
 		return href;
@@ -111,6 +122,7 @@ public class Menu extends IdEntity<Menu> {
 	}
 
 	@Length(min = 0, max = 64)
+	@Column(name = "module")
 	public String getModule() {
 		return module;
 	}

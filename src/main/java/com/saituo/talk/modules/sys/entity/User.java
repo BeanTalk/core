@@ -66,6 +66,8 @@ public class User extends IdEntity<User> {
 	private String userCatagory; // 用户类别
 	private String loginIp; // 最后登陆IP
 	private Date loginDate; // 最后登陆日期
+	private String qq; // QQ
+	private String forward; // 课题方向
 
 	private List<Role> roleList = Lists.newArrayList(); // 拥有角色列表
 
@@ -126,6 +128,14 @@ public class User extends IdEntity<User> {
 		this.password = password;
 	}
 
+	public String getQq() {
+		return qq;
+	}
+
+	public void setQq(String qq) {
+		this.qq = qq;
+	}
+
 	@Length(min = 1, max = 100)
 	@ExcelField(title = "姓名", align = 2, sort = 40)
 	public String getName() {
@@ -140,6 +150,14 @@ public class User extends IdEntity<User> {
 
 	public void setNo(String no) {
 		this.no = no;
+	}
+
+	public String getForward() {
+		return forward;
+	}
+
+	public void setForward(String forward) {
+		this.forward = forward;
 	}
 
 	public void setName(String name) {

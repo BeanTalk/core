@@ -128,6 +128,15 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label">角色标记:</label>
+			<div class="controls">
+				<form:select path="roleSign">
+					<form:options items="${fns:getDictList('sys_role_sign')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
+				<span class="help-inline">分配角色时，需要明确角色标记，需要在程序中进行判断</span>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">角色授权:</label>
 			<div class="controls">
 				<div id="menuTree" class="ztree" style="margin-top:3px;float:left;"></div>

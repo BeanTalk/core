@@ -130,4 +130,7 @@ public abstract class BaseEntity<T> implements Serializable {
 	public static final String DEL_FLAG_DELETE = "1";
 	public static final String DEL_FLAG_AUDIT = "2";
 	
+	// 本模块的
+	public static final String SYS_MODULE = "1";
+	
 }

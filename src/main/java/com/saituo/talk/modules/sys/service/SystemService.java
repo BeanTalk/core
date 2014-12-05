@@ -1,8 +1,3 @@
-/**
- * Copyright &copy; 2012-2013 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- */
 package com.saituo.talk.modules.sys.service;
 
 import java.util.Date;
@@ -53,32 +48,25 @@ public class SystemService extends BaseService {
 	@Autowired
 	private SystemAuthorizingRealm systemRealm;
 
-	// -- User Service --//
-
 	public User getUser(String id) {
 		return userDao.get(id);
 	}
 
 	public Page<User> findUser(Page<User> page, User user) {
+
 		User currentUser = UserUtils.getUser();
 		DetachedCriteria dc = userDao.createDetachedCriteria();
 
 		dc.createAlias("company", "company");
-		if (user.getCompany() != null
-				&& StringUtils.isNotBlank(user.getCompany().getId())) {
-			dc.add(Restrictions.or(
-					Restrictions.eq("company.id", user.getCompany().getId()),
-					Restrictions.like("company.parentIds", "%,"
-							+ user.getCompany().getId() + ",%")));
+		if (user.getCompany() != null && StringUtils.isNotBlank(user.getCompany().getId())) {
+			dc.add(Restrictions.or(Restrictions.eq("company.id", user.getCompany().getId()),
+					Restrictions.like("company.parentIds", "%," + user.getCompany().getId() + ",%")));
 		}
 
 		dc.createAlias("office", "office");
-		if (user.getOffice() != null
-				&& StringUtils.isNotBlank(user.getOffice().getId())) {
-			dc.add(Restrictions.or(
-					Restrictions.eq("office.id", user.getOffice().getId()),
-					Restrictions.like("office.parentIds", "%,"
-							+ user.getOffice().getId() + ",%")));
+		if (user.getOffice() != null && StringUtils.isNotBlank(user.getOffice().getId())) {
+			dc.add(Restrictions.or(Restrictions.eq("office.id", user.getOffice().getId()),
+					Restrictions.like("office.parentIds", "%," + user.getOffice().getId() + ",%")));
 		}
 
 		// 如果不是超级管理员，则不显示超级管理员用户
@@ -89,8 +77,7 @@ public class SystemService extends BaseService {
 		dc.add(dataScopeFilter(currentUser, "office", ""));
 
 		if (StringUtils.isNotEmpty(user.getLoginName())) {
-			dc.add(Restrictions.like("loginName", "%" + user.getLoginName()
-					+ "%"));
+			dc.add(Restrictions.like("loginName", "%" + user.getLoginName() + "%"));
 		}
 		if (StringUtils.isNotEmpty(user.getName())) {
 			dc.add(Restrictions.like("name", "%" + user.getName() + "%"));
@@ -98,9 +85,7 @@ public class SystemService extends BaseService {
 
 		dc.add(Restrictions.eq(User.FIELD_DEL_FLAG, User.DEL_FLAG_NORMAL));
 		if (!StringUtils.isNotEmpty(page.getOrderBy())) {
-			dc.addOrder(Order.asc("company.code"))
-					.addOrder(Order.asc("office.code"))
-					.addOrder(Order.desc("name"));
+			dc.addOrder(Order.asc("company.code")).addOrder(Order.asc("office.code")).addOrder(Order.desc("name"));
 		}
 
 		return userDao.find(page, dc);
@@ -114,7 +99,7 @@ public class SystemService extends BaseService {
 	public User getUserByLoginName(String loginName) {
 		return userDao.findByLoginName(loginName);
 	}
-	
+
 	public User getUserByEmail(String email) {
 		return userDao.findByEmail(email);
 	}
@@ -136,16 +121,14 @@ public class SystemService extends BaseService {
 	}
 
 	@Transactional(readOnly = false)
-	public void updatePasswordById(String id, String loginName,
-			String newPassword) {
+	public void updatePasswordById(String id, String loginName, String newPassword) {
 		userDao.updatePasswordById(entryptPassword(newPassword), id);
 		systemRealm.clearCachedAuthorizationInfo(loginName);
 	}
 
 	@Transactional(readOnly = false)
 	public void updateUserLoginInfo(String id) {
-		userDao.updateLoginInfo(SecurityUtils.getSubject().getSession()
-				.getHost(), new Date(), id);
+		userDao.updateLoginInfo(SecurityUtils.getSubject().getSession().getHost(), new Date(), id);
 	}
 
 	/**
@@ -153,8 +136,7 @@ public class SystemService extends BaseService {
 	 */
 	public static String entryptPassword(String plainPassword) {
 		byte[] salt = Digests.generateSalt(SALT_SIZE);
-		byte[] hashPassword = Digests.sha1(plainPassword.getBytes(), salt,
-				HASH_INTERATIONS);
+		byte[] hashPassword = Digests.sha1(plainPassword.getBytes(), salt, HASH_INTERATIONS);
 		return Encodes.encodeHex(salt) + Encodes.encodeHex(hashPassword);
 	}
 
@@ -169,10 +151,8 @@ public class SystemService extends BaseService {
 	 */
 	public static boolean validatePassword(String plainPassword, String password) {
 		byte[] salt = Encodes.decodeHex(password.substring(0, 16));
-		byte[] hashPassword = Digests.sha1(plainPassword.getBytes(), salt,
-				HASH_INTERATIONS);
-		return password.equals(Encodes.encodeHex(salt)
-				+ Encodes.encodeHex(hashPassword));
+		byte[] hashPassword = Digests.sha1(plainPassword.getBytes(), salt, HASH_INTERATIONS);
+		return password.equals(Encodes.encodeHex(salt) + Encodes.encodeHex(hashPassword));
 	}
 
 	// -- Role Service --//
@@ -244,16 +224,13 @@ public class SystemService extends BaseService {
 	public void saveMenu(Menu menu) {
 		menu.setParent(this.getMenu(menu.getParent().getId()));
 		String oldParentIds = menu.getParentIds(); // 获取修改前的parentIds，用于更新子节点的parentIds
-		menu.setParentIds(menu.getParent().getParentIds()
-				+ menu.getParent().getId() + ",");
+		menu.setParentIds(menu.getParent().getParentIds() + menu.getParent().getId() + ",");
 		menuDao.clear();
 		menuDao.save(menu);
 		// 更新子节点 parentIds
-		List<Menu> list = menuDao.findByParentIdsLike("%," + menu.getId()
-				+ ",%");
+		List<Menu> list = menuDao.findByParentIdsLike("%," + menu.getId() + ",%");
 		for (Menu e : list) {
-			e.setParentIds(e.getParentIds().replace(oldParentIds,
-					menu.getParentIds()));
+			e.setParentIds(e.getParentIds().replace(oldParentIds, menu.getParentIds()));
 		}
 		menuDao.save(list);
 		systemRealm.clearAllCachedAuthorizationInfo();

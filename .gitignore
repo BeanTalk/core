@@ -12,9 +12,8 @@
 hs_err_pid*
 
 .classpath
-
 .project
-
 .settings/*
 target/*
-logs/jeesite.log
+logs/*
+bin/
