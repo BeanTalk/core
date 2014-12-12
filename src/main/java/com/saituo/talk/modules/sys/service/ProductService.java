@@ -1,5 +1,7 @@
 package com.saituo.talk.modules.sys.service;
 
+import java.util.List;
+
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -28,7 +30,7 @@ public class ProductService {
 			dc.add(Restrictions.like("productName", "%" + product.getProductName() + "%"));
 		}
 
-		if (product != null && product.getBrand() != null) {
+		if (product != null && product.getBrand() != null && product.getBrand().getId() != null) {
 			dc.add(Restrictions.eq("brand.id", product.getBrand().getId()));
 		}
 
@@ -43,17 +45,31 @@ public class ProductService {
 		return productDao.find(page, dc);
 	}
 
+	public long count(Product product) {
+
+		DetachedCriteria dc = productDao.createDetachedCriteria();
+		if (StringUtils.isNotEmpty(product.getProductName())) {
+			dc.add(Restrictions.eq("productName", product.getProductName()));
+		}
+		dc.add(Restrictions.eq(BaseEntity.FIELD_DEL_FLAG, BaseEntity.DEL_FLAG_NORMAL));
+		return productDao.count(dc);
+
+	}
+
+	public List<Product> findAll() {
+		DetachedCriteria detachedCriteria = productDao.createDetachedCriteria();
+		detachedCriteria.add(Restrictions.eq(BaseEntity.FIELD_DEL_FLAG, BaseEntity.DEL_FLAG_NORMAL));
+		return productDao.find(detachedCriteria);
+	}
+
 	public Product get(Integer id) {
 		return productDao.get(id);
 	}
 
 	@Transactional(readOnly = false)
 	public void save(Product product) {
-		if (product.getId() != null) {
-			productDao.update(product);
-		} else {
-			productDao.save(product);
-		}
+		productDao.clear();
+		productDao.save(product);
 	}
 
 	@Transactional(readOnly = false)

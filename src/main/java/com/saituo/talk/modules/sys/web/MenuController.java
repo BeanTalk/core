@@ -45,7 +45,7 @@ public class MenuController extends BaseController {
 	@ModelAttribute("menu")
 	public Menu get(@RequestParam(required = false) String id) {
 		if (StringUtils.isNotBlank(id)) {
-			return systemService.getMenu(id);
+			return systemService.getMenu(Integer.valueOf(id));
 		} else {
 			return new Menu();
 		}
@@ -56,7 +56,7 @@ public class MenuController extends BaseController {
 	public String list(Model model) {
 		List<Menu> list = Lists.newArrayList();
 		List<Menu> sourcelist = systemService.findAllMenu();
-		Menu.sortList(list, sourcelist, "1");
+		Menu.sortList(list, sourcelist, 1);
 		model.addAttribute("list", list);
 		return "modules/sys/menu/menuList";
 	}
@@ -65,7 +65,7 @@ public class MenuController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(Menu menu, Model model) {
 		if (menu.getParent() == null || menu.getParent().getId() == null) {
-			menu.setParent(new Menu("1"));
+			menu.setParent(new Menu(1));
 		}
 		menu.setParent(systemService.getMenu(menu.getParent().getId()));
 		model.addAttribute("menu", menu);
@@ -86,10 +86,10 @@ public class MenuController extends BaseController {
 	@RequiresPermissions("sys:menu:edit")
 	@RequestMapping(value = "delete")
 	public String delete(String id, RedirectAttributes redirectAttributes) {
-		if (Menu.isRoot(id)) {
+		if (Menu.isRoot(Integer.valueOf(id))) {
 			addMessage(redirectAttributes, "删除菜单失败, 不允许删除顶级菜单或编号为空");
 		} else {
-			systemService.deleteMenu(id);
+			systemService.deleteMenu(Integer.valueOf(id));
 			addMessage(redirectAttributes, "删除菜单成功");
 		}
 		return "redirect:" + Global.getAdminPath() + "/sys/menu/";
@@ -106,7 +106,7 @@ public class MenuController extends BaseController {
 	 */
 	@RequiresPermissions("sys:menu:edit")
 	@RequestMapping(value = "updateSort")
-	public String updateSort(String[] ids, Integer[] sorts, RedirectAttributes redirectAttributes) {
+	public String updateSort(Integer[] ids, Integer[] sorts, RedirectAttributes redirectAttributes) {
 		int len = ids.length;
 		Menu[] menus = new Menu[len];
 		for (int i = 0; i < len; i++) {

@@ -7,7 +7,7 @@ package com.saituo.talk.common.utils.excel.fieldtype;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Lists;
 import com.saituo.talk.common.utils.Collections3;

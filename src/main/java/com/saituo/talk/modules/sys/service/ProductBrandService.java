@@ -48,12 +48,25 @@ public class ProductBrandService {
 		return mapData;
 	}
 
+	public List<ProductBrand> findAll() {
+		return productBrandDao.findAll();
+	}
+
 	public List<String> getBrandNameList() {
 		return productBrandDao.findBrandNameList();
 	}
 
 	public ProductBrand get(Integer id) {
 		return productBrandDao.get(id);
+	}
+
+	public ProductBrand findProductBrand(ProductBrand productBrand) {
+
+		DetachedCriteria dc = productBrandDao.createDetachedCriteria();
+		if (StringUtils.isNotEmpty(productBrand.getBrandName())) {
+			dc.add(Restrictions.eq("productBrand.brandName", productBrand.getBrandName()));
+		}
+		return productBrandDao.find(dc).get(0);
 	}
 
 	@Transactional(readOnly = false)

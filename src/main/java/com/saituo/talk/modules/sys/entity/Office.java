@@ -66,7 +66,7 @@ public class Office extends IdEntity<Office> {
 		super();
 	}
 
-	public Office(String id) {
+	public Office(Integer id) {
 		this();
 		this.id = id;
 	}
@@ -213,16 +213,16 @@ public class Office extends IdEntity<Office> {
 	}
 
 	@Transient
-	public static void sortList(List<Office> list, List<Office> sourcelist, String parentId) {
+	public static void sortList(List<Office> list, List<Office> sourcelist, Integer parentId) {
 		for (int i = 0; i < sourcelist.size(); i++) {
 			Office e = sourcelist.get(i);
-			if (e.getParent() != null && e.getParent().getId() != null && e.getParent().getId().equals(parentId)) {
+			if (e.getParent() != null && e.getParent().getId() != null && e.getParent().getId() == parentId) {
 				list.add(e);
 				// 判断是否还有子节点, 有则继续获取子节点
 				for (int j = 0; j < sourcelist.size(); j++) {
 					Office child = sourcelist.get(j);
 					if (child.getParent() != null && child.getParent().getId() != null
-							&& child.getParent().getId().equals(e.getId())) {
+							&& child.getParent().getId() == e.getId()) {
 						sortList(list, sourcelist, e.getId());
 						break;
 					}
@@ -237,8 +237,8 @@ public class Office extends IdEntity<Office> {
 	}
 
 	@Transient
-	public static boolean isRoot(String id) {
-		return id != null && id.equals("1");
+	public static boolean isRoot(Integer id) {
+		return id == 1;
 	}
 
 }

@@ -7,9 +7,6 @@
 	<%@include file="/WEB-INF/views/include/dialog.jsp" %>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			// 表格排序
-			tableSort({callBack : page});
-			
 			$("#btnExport").click(function(){
 				top.$.jBox.confirm("确认要导出产品数据吗？","系统提示",function(v,h,f){
 					if(v == "ok"){
@@ -22,6 +19,15 @@
 			$("#btnImport").click(function(){
 				$.jBox($("#importBox").html(), {title:"导入数据", buttons:{"关闭":true}, 
 					bottomText:"导入文件不能超过5M，仅允许导入“xls”或“xlsx”格式文件！"});
+			});
+			
+			$("#btnIndex").click(function(){
+				top.$.jBox.confirm("确认要重建索引吗？","系统提示",function(v,h,f){
+					if(v == "ok"){
+						$("#searchForm").attr("action","${ctx}/order/product/create/index").submit();
+					}
+				},{buttonsFocus:1});
+				top.$('.jbox-body .jbox-icon').css('top','55px');
 			});
 		});
 	
@@ -63,6 +69,7 @@
 			&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" onclick="return page();"/>
 			&nbsp;<input id="btnExport" class="btn btn-primary" type="button" value="导出"/>
 			&nbsp;<input id="btnImport" class="btn btn-primary" type="button" value="导入"/>
+			&nbsp;<input id="btnIndex" class="btn btn-primary" type="button" value="重建索引"/>
 		</div>
 	</form:form>
 	<tags:message content="${message}"/>
@@ -76,8 +83,6 @@
 				<th>单位</th>
 				<th>目录价</th>
 				<th>备货价</th>
-				<th>创建者</th>
-				<th>创建时间</th>
 				<shiro:hasPermission name="order:product:edit">
 					<th>操作</th>
 				</shiro:hasPermission>
@@ -93,8 +98,6 @@
 					<td>${product.unitValue}</td>
 					<td>${product.catalogFee}</td>
 					<td>${product.deliveryFee}</td>
-					<td>${product.acceptPerson}</td>
-					<td>${product.acceptDate}</td>
 					<shiro:hasPermission name="order:product:edit"><td>
 	    				<a href="${ctx}/order/product/form?id=${product.id}">修改</a>
 						<a href="${ctx}/order/product/delete?id=${product.id}" onclick="return confirmx('确认要删除产品吗？', this.href)">删除</a>

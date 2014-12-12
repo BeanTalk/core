@@ -1,13 +1,7 @@
 package com.saituo.talk.modules.sys.entity;
 
-import java.util.Date;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -16,7 +10,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.saituo.talk.common.persistence.BaseEntity;
+import com.saituo.talk.common.persistence.IdEntity;
+import com.saituo.talk.common.utils.excel.annotation.ExcelField;
 
 /**
  * 产品Entity
@@ -25,14 +20,13 @@ import com.saituo.talk.common.persistence.BaseEntity;
  * @version 2014-12-07
  */
 @Entity
-@Table(name = "st_product")
+@Table(name = "st_product_bak")
 @DynamicInsert
 @DynamicUpdate
-public class Product extends BaseEntity<Product> {
+public class Product extends IdEntity<Product> {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer id;// 品编码产
 	private String productName;// 产品名称
 	private String productNum;// 货号
 	private ProductBrand brand;// 产品品牌编码
@@ -40,22 +34,10 @@ public class Product extends BaseEntity<Product> {
 	private String unitValue;// 单位
 	private Double catalogFee;// 目录价
 	private Double deliveryFee;// 备货价
-	private String acceptPerson;// 创建者
-	private Date acceptDate; // 创建时间
-	private String delFlag = DEL_FLAG_NORMAL; // 删除标记
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "product_id")
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	@NotEmpty
 	@Column(name = "product_name")
+	@ExcelField(title = "产品名称", align = 2, sort = 10)
 	public String getProductName() {
 		return productName;
 	}
@@ -66,6 +48,7 @@ public class Product extends BaseEntity<Product> {
 
 	@NotEmpty
 	@Column(name = "product_num")
+	@ExcelField(title = "货号", align = 2, sort = 15)
 	public String getProductNum() {
 		return productNum;
 	}
@@ -74,8 +57,11 @@ public class Product extends BaseEntity<Product> {
 		this.productNum = productNum;
 	}
 
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
+	// @JoinColumn(name = "brand_id", insertable = false, updatable = false,
+	// nullable = false)
 	@JoinColumn(name = "brand_id")
+	@ExcelField(title = "品牌", align = 2, sort = 20)
 	public ProductBrand getBrand() {
 		return brand;
 	}
@@ -85,6 +71,7 @@ public class Product extends BaseEntity<Product> {
 	}
 
 	@Column(name = "spec_value")
+	@ExcelField(title = "规格", align = 2, sort = 25)
 	public String getSpecValue() {
 		return specValue;
 	}
@@ -94,6 +81,7 @@ public class Product extends BaseEntity<Product> {
 	}
 
 	@Column(name = "unit_value")
+	@ExcelField(title = "单位", align = 2, sort = 30)
 	public String getUnitValue() {
 		return unitValue;
 	}
@@ -102,6 +90,7 @@ public class Product extends BaseEntity<Product> {
 	}
 
 	@Column(name = "catalog_fee")
+	@ExcelField(title = "目录价", align = 2, sort = 30)
 	public Double getCatalogFee() {
 		return catalogFee;
 	}
@@ -111,35 +100,11 @@ public class Product extends BaseEntity<Product> {
 	}
 
 	@Column(name = "delivery_fee")
+	@ExcelField(title = "备货价", align = 2, sort = 30)
 	public Double getDeliveryFee() {
 		return deliveryFee;
 	}
 	public void setDeliveryFee(Double deliveryFee) {
 		this.deliveryFee = deliveryFee;
-	}
-
-	@Column(name = "accept_person")
-	public String getAcceptPerson() {
-		return acceptPerson;
-	}
-	public void setAcceptPerson(String acceptPerson) {
-		this.acceptPerson = acceptPerson;
-	}
-
-	@Column(name = "accept_date")
-	public Date getAcceptDate() {
-		return acceptDate;
-	}
-
-	public void setAcceptDate(Date acceptDate) {
-		this.acceptDate = acceptDate;
-	}
-
-	@Column(name = "del_flag")
-	public String getDelFlag() {
-		return delFlag;
-	}
-	public void setDelFlag(String delFlag) {
-		this.delFlag = delFlag;
 	}
 }

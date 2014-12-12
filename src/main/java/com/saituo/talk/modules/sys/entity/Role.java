@@ -69,7 +69,7 @@ public class Role extends IdEntity<Role> {
 		this.dataScope = DATA_SCOPE_CUSTOM;
 	}
 
-	public Role(String id, String name) {
+	public Role(Integer id, String name) {
 		this();
 		this.id = id;
 		this.name = name;
@@ -126,8 +126,8 @@ public class Role extends IdEntity<Role> {
 	}
 
 	@Transient
-	public List<String> getUserIdList() {
-		List<String> nameIdList = Lists.newArrayList();
+	public List<Integer> getUserIdList() {
+		List<Integer> nameIdList = Lists.newArrayList();
 		for (User user : userList) {
 			nameIdList.add(user.getId());
 		}
@@ -138,7 +138,7 @@ public class Role extends IdEntity<Role> {
 	public String getUserIds() {
 		List<String> nameIdList = Lists.newArrayList();
 		for (User user : userList) {
-			nameIdList.add(user.getId());
+			nameIdList.add(String.valueOf(user.getId()));
 		}
 		return StringUtils.join(nameIdList, ",");
 	}
@@ -159,8 +159,8 @@ public class Role extends IdEntity<Role> {
 	}
 
 	@Transient
-	public List<String> getMenuIdList() {
-		List<String> menuIdList = Lists.newArrayList();
+	public List<Integer> getMenuIdList() {
+		List<Integer> menuIdList = Lists.newArrayList();
 		for (Menu menu : menuList) {
 			menuIdList.add(menu.getId());
 		}
@@ -168,9 +168,9 @@ public class Role extends IdEntity<Role> {
 	}
 
 	@Transient
-	public void setMenuIdList(List<String> menuIdList) {
+	public void setMenuIdList(List<Integer> menuIdList) {
 		menuList = Lists.newArrayList();
-		for (String menuId : menuIdList) {
+		for (Integer menuId : menuIdList) {
 			Menu menu = new Menu();
 			menu.setId(menuId);
 			menuList.add(menu);
@@ -181,7 +181,7 @@ public class Role extends IdEntity<Role> {
 	public String getMenuIds() {
 		List<String> nameIdList = Lists.newArrayList();
 		for (Menu menu : menuList) {
-			nameIdList.add(menu.getId());
+			nameIdList.add(String.valueOf(menu.getId()));
 		}
 		return StringUtils.join(nameIdList, ",");
 	}
@@ -193,7 +193,7 @@ public class Role extends IdEntity<Role> {
 			String[] ids = StringUtils.split(menuIds, ",");
 			for (String menuId : ids) {
 				Menu menu = new Menu();
-				menu.setId(menuId);
+				menu.setId(Integer.valueOf(menuId));
 				menuList.add(menu);
 			}
 		}
@@ -215,8 +215,8 @@ public class Role extends IdEntity<Role> {
 	}
 
 	@Transient
-	public List<String> getOfficeIdList() {
-		List<String> officeIdList = Lists.newArrayList();
+	public List<Integer> getOfficeIdList() {
+		List<Integer> officeIdList = Lists.newArrayList();
 		for (Office office : officeList) {
 			officeIdList.add(office.getId());
 		}
@@ -224,9 +224,9 @@ public class Role extends IdEntity<Role> {
 	}
 
 	@Transient
-	public void setOfficeIdList(List<String> officeIdList) {
+	public void setOfficeIdList(List<Integer> officeIdList) {
 		officeList = Lists.newArrayList();
-		for (String officeId : officeIdList) {
+		for (Integer officeId : officeIdList) {
 			Office office = new Office();
 			office.setId(officeId);
 			officeList.add(office);
@@ -237,7 +237,7 @@ public class Role extends IdEntity<Role> {
 	public String getOfficeIds() {
 		List<String> nameIdList = Lists.newArrayList();
 		for (Office office : officeList) {
-			nameIdList.add(office.getId());
+			nameIdList.add(String.valueOf(office.getId()));
 		}
 		return StringUtils.join(nameIdList, ",");
 	}
@@ -249,7 +249,7 @@ public class Role extends IdEntity<Role> {
 			String[] ids = StringUtils.split(officeIds, ",");
 			for (String officeId : ids) {
 				Office office = new Office();
-				office.setId(officeId);
+				office.setId(Integer.valueOf(officeId));
 				officeList.add(office);
 			}
 		}
@@ -288,8 +288,8 @@ public class Role extends IdEntity<Role> {
 	}
 
 	@Transient
-	public static boolean isAdmin(String id) {
-		return id != null && id.equals("1");
+	public static boolean isAdmin(Integer id) {
+		return id == 1;
 	}
 
 	// @Transient

@@ -78,7 +78,7 @@ public class DictController extends BaseController {
 	@RequiresPermissions("sys:dict:edit")
 	@RequestMapping(value = "delete")
 	public String delete(String id, RedirectAttributes redirectAttributes) {
-		dictService.delete(id);
+		dictService.delete(Integer.valueOf(id));
 		addMessage(redirectAttributes, "删除字典成功");
 		return "redirect:"+Global.getAdminPath()+"/sys/dict/?repage";
 	}

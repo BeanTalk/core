@@ -33,12 +33,12 @@ public class UserDao extends BaseDao<User> {
 				new Parameter(loginName, User.DEL_FLAG_NORMAL));
 	}
 
-	public int updatePasswordById(String newPassword, String id) {
+	public int updatePasswordById(String newPassword, Integer id) {
 		return update("update User set password=:p1 where id = :p2",
 				new Parameter(newPassword, id));
 	}
 
-	public int updateLoginInfo(String loginIp, Date loginDate, String id) {
+	public int updateLoginInfo(String loginIp, Date loginDate, Integer id) {
 		return update(
 				"update User set loginIp=:p1, loginDate=:p2 where id = :p3",
 				new Parameter(loginIp, loginDate, id));

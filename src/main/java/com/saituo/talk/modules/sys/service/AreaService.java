@@ -7,7 +7,6 @@ package com.saituo.talk.modules.sys.service;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +29,7 @@ public class AreaService extends BaseService {
 	@Autowired
 	private AreaDao areaDao;
 
-	public Area get(String id) {
+	public Area get(Integer id) {
 		return areaDao.get(id);
 	}
 
@@ -40,13 +39,13 @@ public class AreaService extends BaseService {
 
 	@Transactional(readOnly = false)
 	public void save(Area area) {
-		
+
 		area.setParent(this.get(area.getParent().getId()));
 		String oldParentIds = area.getParentIds(); // 获取修改前的parentIds，用于更新子节点的parentIds
 		area.setParentIds(area.getParent().getParentIds() + area.getParent().getId() + ",");
 		areaDao.clear();
 		areaDao.save(area);
-		
+
 		// 更新子节点 parentIds
 		List<Area> list = areaDao.findByParentIdsLike("%," + area.getId() + ",%");
 		for (Area e : list) {
@@ -57,7 +56,7 @@ public class AreaService extends BaseService {
 	}
 
 	@Transactional(readOnly = false)
-	public void delete(String id) {
+	public void delete(Integer id) {
 		areaDao.deleteById(id, "%," + id + ",%");
 		UserUtils.removeCache(UserUtils.CACHE_AREA_LIST);
 	}

@@ -41,7 +41,7 @@ import com.saituo.talk.modules.sys.web.LoginController;
  * @author ThinkGem
  * @version 2013-5-29
  */
-@DependsOn({ "userDao", "roleDao", "menuDao" })
+@DependsOn({"userDao", "roleDao", "menuDao"})
 public class SystemAuthorizingRealm extends AuthorizingRealm {
 
 	private SystemService systemService;
@@ -78,7 +78,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		
+
 		Principal principal = (Principal) getAvailablePrincipal(principals);
 		User user = getSystemService().getUserByLoginName(principal.getLoginName());
 
@@ -141,7 +141,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 
 		private static final long serialVersionUID = 1L;
 
-		private String id;
+		private Integer id;
 		private String loginName;
 		private String name;
 		private Map<String, Object> cacheMap;
@@ -152,7 +152,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 			this.name = user.getName();
 		}
 
-		public String getId() {
+		public Integer getId() {
 			return id;
 		}
 

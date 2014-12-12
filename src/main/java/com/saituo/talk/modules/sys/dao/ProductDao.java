@@ -10,7 +10,7 @@ import com.saituo.talk.modules.sys.entity.Product;
 public class ProductDao extends BaseDao<Product> {
 
 	public void delete(Integer productId) {
-		update("update product set delFlag = :p2 where id = :p1", new Parameter(productId, 0));
+		update("update product set delFlag = :p2 where id = :p1", new Parameter(productId, 1));
 	}
-
+	
 }

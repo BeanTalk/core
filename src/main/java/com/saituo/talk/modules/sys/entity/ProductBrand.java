@@ -6,11 +6,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -19,17 +15,15 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Where;
 
-import com.saituo.talk.common.persistence.BaseEntity;
+import com.saituo.talk.common.persistence.IdEntity;
 
 @Entity
-@Table(name = "st_product_brand")
+@Table(name = "st_product_brand_bak")
 @DynamicInsert
 @DynamicUpdate
-public class ProductBrand extends BaseEntity<ProductBrand> {
+public class ProductBrand extends IdEntity<ProductBrand> {
 
-	private static final long serialVersionUID = -2781004730198300131L;
-
-	private Integer id;
+	private static final long serialVersionUID = -4521867732802841977L;
 
 	private String brandName;
 
@@ -44,26 +38,6 @@ public class ProductBrand extends BaseEntity<ProductBrand> {
 	private Double limitDiscount;
 
 	private List<Product> products;
-
-	public ProductBrand(Integer id) {
-		super();
-		this.id = id;
-	}
-
-	public ProductBrand() {
-		super();
-	}
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "brand_id")
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	@Column(name = "brand_name")
 	public String getBrandName() {
@@ -121,7 +95,6 @@ public class ProductBrand extends BaseEntity<ProductBrand> {
 
 	@OneToMany(mappedBy = "brand", fetch = FetchType.LAZY)
 	@Where(clause = "del_flag='" + DEL_FLAG_NORMAL + "'")
-	@OrderBy(value = "id")
 	@NotFound(action = NotFoundAction.IGNORE)
 	public List<Product> getProducts() {
 		return products;

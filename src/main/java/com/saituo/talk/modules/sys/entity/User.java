@@ -73,7 +73,7 @@ public class User extends IdEntity<User> {
 		super();
 	}
 
-	public User(String id) {
+	public User(Integer id) {
 		this();
 		this.id = id;
 	}
@@ -242,15 +242,15 @@ public class User extends IdEntity<User> {
 	public List<String> getRoleIdList() {
 		List<String> roleIdList = Lists.newArrayList();
 		for (Role role : roleList) {
-			roleIdList.add(role.getId());
+			roleIdList.add(String.valueOf(role.getId()));
 		}
 		return roleIdList;
 	}
 
 	@Transient
-	public void setRoleIdList(List<String> roleIdList) {
+	public void setRoleIdList(List<Integer> roleIdList) {
 		roleList = Lists.newArrayList();
-		for (String roleId : roleIdList) {
+		for (Integer roleId : roleIdList) {
 			Role role = new Role();
 			role.setId(roleId);
 			roleList.add(role);
@@ -271,8 +271,8 @@ public class User extends IdEntity<User> {
 	}
 
 	@Transient
-	public static boolean isAdmin(String id) {
-		return id != null && id.equals("1");
+	public static boolean isAdmin(Integer id) {
+		return id == 1;
 	}
 
 	// @Override

@@ -35,7 +35,7 @@ public class LogService extends BaseService {
 	@Autowired
 	private LogDao logDao;
 	
-	public Log get(String id) {
+	public Log get(Integer id) {
 		return logDao.get(id);
 	}
 	

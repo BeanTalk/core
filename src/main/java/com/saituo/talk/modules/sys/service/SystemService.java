@@ -48,7 +48,7 @@ public class SystemService extends BaseService {
 	@Autowired
 	private SystemAuthorizingRealm systemRealm;
 
-	public User getUser(String id) {
+	public User getUser(Integer id) {
 		return userDao.get(id);
 	}
 
@@ -58,7 +58,7 @@ public class SystemService extends BaseService {
 		DetachedCriteria dc = userDao.createDetachedCriteria();
 
 		dc.createAlias("office", "office");
-		if (user.getOffice() != null && StringUtils.isNotBlank(user.getOffice().getId())) {
+		if (user.getOffice() != null && user.getOffice().getId() != null) {
 			dc.add(Restrictions.or(Restrictions.eq("office.id", user.getOffice().getId()),
 					Restrictions.like("office.parentIds", "%," + user.getOffice().getId() + ",%")));
 		}
@@ -115,13 +115,13 @@ public class SystemService extends BaseService {
 	}
 
 	@Transactional(readOnly = false)
-	public void updatePasswordById(String id, String loginName, String newPassword) {
+	public void updatePasswordById(Integer id, String loginName, String newPassword) {
 		userDao.updatePasswordById(entryptPassword(newPassword), id);
 		systemRealm.clearCachedAuthorizationInfo(loginName);
 	}
 
 	@Transactional(readOnly = false)
-	public void updateUserLoginInfo(String id) {
+	public void updateUserLoginInfo(Integer id) {
 		userDao.updateLoginInfo(SecurityUtils.getSubject().getSession().getHost(), new Date(), id);
 	}
 
@@ -150,8 +150,7 @@ public class SystemService extends BaseService {
 	}
 
 	// -- Role Service --//
-
-	public Role getRole(String id) {
+	public Role getRole(Integer id) {
 		return roleDao.get(id);
 	}
 
@@ -172,14 +171,14 @@ public class SystemService extends BaseService {
 	}
 
 	@Transactional(readOnly = false)
-	public void deleteRole(String id) {
+	public void deleteRole(Integer id) {
 		roleDao.deleteById(id);
 		systemRealm.clearAllCachedAuthorizationInfo();
 		UserUtils.removeCache(UserUtils.CACHE_ROLE_LIST);
 	}
 
 	@Transactional(readOnly = false)
-	public Boolean outUserInRole(Role role, String userId) {
+	public Boolean outUserInRole(Role role, Integer userId) {
 		User user = userDao.get(userId);
 		List<String> roleIds = user.getRoleIdList();
 		List<Role> roles = user.getRoleList();
@@ -193,7 +192,7 @@ public class SystemService extends BaseService {
 	}
 
 	@Transactional(readOnly = false)
-	public User assignUserToRole(Role role, String userId) {
+	public User assignUserToRole(Role role, Integer userId) {
 		User user = userDao.get(userId);
 		List<String> roleIds = user.getRoleIdList();
 		if (roleIds.contains(role.getId())) {
@@ -206,7 +205,7 @@ public class SystemService extends BaseService {
 
 	// -- Menu Service --//
 
-	public Menu getMenu(String id) {
+	public Menu getMenu(Integer id) {
 		return menuDao.get(id);
 	}
 
@@ -232,7 +231,7 @@ public class SystemService extends BaseService {
 	}
 
 	@Transactional(readOnly = false)
-	public void deleteMenu(String id) {
+	public void deleteMenu(Integer id) {
 		menuDao.deleteById(id, "%," + id + ",%");
 		systemRealm.clearAllCachedAuthorizationInfo();
 		UserUtils.removeCache(UserUtils.CACHE_MENU_LIST);

@@ -47,7 +47,7 @@ public class OfficeController extends BaseController {
 	@ModelAttribute("office")
 	public Office get(@RequestParam(required = false) String id) {
 		if (StringUtils.isNotBlank(id)) {
-			return officeService.get(id);
+			return officeService.get(Integer.valueOf(id));
 		} else {
 			return new Office();
 		}
@@ -56,12 +56,12 @@ public class OfficeController extends BaseController {
 	@RequiresPermissions("sys:office:view")
 	@RequestMapping({"list", ""})
 	public String list(Office office, Model model) {
-		// User user = UserUtils.getUser();
-		// if(user.isAdmin()){
-		office.setId("1");
-		// }else{
-		// office.setId(user.getOffice().getId());
-		// }
+		User user = UserUtils.getUser();
+		if (user.isAdmin()) {
+			office.setId(1);
+		} else {
+			office.setId(user.getOffice().getId());
+		}
 		model.addAttribute("office", office);
 		List<Office> list = Lists.newArrayList();
 		List<Office> sourcelist = officeService.findAll();
@@ -101,10 +101,10 @@ public class OfficeController extends BaseController {
 	@RequestMapping("delete")
 	public String delete(String id, RedirectAttributes redirectAttributes) {
 
-		if (Office.isRoot(id)) {
+		if (Office.isRoot(Integer.valueOf(id))) {
 			addMessage(redirectAttributes, "删除机构失败, 不允许删除顶级机构或编号空");
 		} else {
-			officeService.delete(id);
+			officeService.delete(Integer.valueOf(id));
 			addMessage(redirectAttributes, "删除机构成功");
 		}
 		return "redirect:" + Global.getAdminPath() + "/sys/office/";
@@ -121,7 +121,6 @@ public class OfficeController extends BaseController {
 
 		// User user = UserUtils.getUser();
 		List<Office> list = officeService.findAll();
-
 		for (int i = 0; i < list.size(); i++) {
 			Office e = list.get(i);
 
