@@ -218,6 +218,100 @@ public class BaseDao<T> {
 	}
 
 	/**
+	 * 保存实体不生成ID
+	 * 
+	 * @param entity
+	 */
+	public void updateForOrder(T entity) {
+		try {
+			// 获取实体编号
+			Object id = null;
+			for (Method method : entity.getClass().getMethods()) {
+				Id idAnn = method.getAnnotation(Id.class);
+				if (idAnn != null) {
+					id = method.invoke(entity);
+					break;
+				}
+			}
+			Integer idInt = (Integer) id;
+			// 插入前执行方法
+			if (idInt == null) {
+				for (Method method : entity.getClass().getMethods()) {
+					PrePersist pp = method.getAnnotation(PrePersist.class);
+					if (pp != null) {
+						method.invoke(entity);
+						break;
+					}
+				}
+			}
+			// 更新前执行方法
+			else {
+				for (Method method : entity.getClass().getMethods()) {
+					PreUpdate pu = method.getAnnotation(PreUpdate.class);
+					if (pu != null) {
+						method.invoke(entity);
+						break;
+					}
+				}
+			}
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		getSession().update(entity);
+	}
+
+	/**
+	 * 保存实体不生成ID
+	 * 
+	 * @param entity
+	 */
+	public void saveForOrder(T entity) {
+		try {
+			// 获取实体编号
+			Object id = null;
+			for (Method method : entity.getClass().getMethods()) {
+				Id idAnn = method.getAnnotation(Id.class);
+				if (idAnn != null) {
+					id = method.invoke(entity);
+					break;
+				}
+			}
+			Integer idInt = (Integer) id;
+			// 插入前执行方法
+			if (idInt == null) {
+				for (Method method : entity.getClass().getMethods()) {
+					PrePersist pp = method.getAnnotation(PrePersist.class);
+					if (pp != null) {
+						method.invoke(entity);
+						break;
+					}
+				}
+			}
+			// 更新前执行方法
+			else {
+				for (Method method : entity.getClass().getMethods()) {
+					PreUpdate pu = method.getAnnotation(PreUpdate.class);
+					if (pu != null) {
+						method.invoke(entity);
+						break;
+					}
+				}
+			}
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		getSession().saveOrUpdate(entity);
+	}
+
+	/**
 	 * 保存实体
 	 * 
 	 * @param entity
@@ -293,6 +387,16 @@ public class BaseDao<T> {
 	 */
 	public int update(String qlString, Parameter parameter) {
 		return createQuery(qlString, parameter).executeUpdate();
+	}
+
+	/**
+	 * 更新数据
+	 * 
+	 * @param entity
+	 * @return
+	 */
+	public void update(T entity) {
+		getSession().update(entity);
 	}
 
 	/**

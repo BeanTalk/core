@@ -2,16 +2,15 @@ package com.saituo.talk.modules.sys.entity;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -33,7 +32,7 @@ public class Product extends BaseEntity<Product> {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer productId;// 产品编码
+	private Integer id;// 品编码产
 	private String productName;// 产品名称
 	private String productNum;// 货号
 	private ProductBrand brand;// 产品品牌编码
@@ -43,15 +42,16 @@ public class Product extends BaseEntity<Product> {
 	private Double deliveryFee;// 备货价
 	private String acceptPerson;// 创建者
 	private Date acceptDate; // 创建时间
+	private String delFlag = DEL_FLAG_NORMAL; // 删除标记
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "product_id")
-	public Integer getProductId() {
-		return productId;
+	public Integer getId() {
+		return id;
 	}
-	public void setProductId(Integer productId) {
-		this.productId = productId;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	@NotEmpty
@@ -59,6 +59,7 @@ public class Product extends BaseEntity<Product> {
 	public String getProductName() {
 		return productName;
 	}
+
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
@@ -73,19 +74,21 @@ public class Product extends BaseEntity<Product> {
 		this.productNum = productNum;
 	}
 
-	@NotNull
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "brand_id")
 	public ProductBrand getBrand() {
 		return brand;
 	}
+
 	public void setBrand(ProductBrand brand) {
 		this.brand = brand;
 	}
+
 	@Column(name = "spec_value")
 	public String getSpecValue() {
 		return specValue;
 	}
+
 	public void setSpecValue(String specValue) {
 		this.specValue = specValue;
 	}
@@ -102,6 +105,7 @@ public class Product extends BaseEntity<Product> {
 	public Double getCatalogFee() {
 		return catalogFee;
 	}
+
 	public void setCatalogFee(Double catalogFee) {
 		this.catalogFee = catalogFee;
 	}
@@ -126,7 +130,16 @@ public class Product extends BaseEntity<Product> {
 	public Date getAcceptDate() {
 		return acceptDate;
 	}
+
 	public void setAcceptDate(Date acceptDate) {
 		this.acceptDate = acceptDate;
+	}
+
+	@Column(name = "del_flag")
+	public String getDelFlag() {
+		return delFlag;
+	}
+	public void setDelFlag(String delFlag) {
+		this.delFlag = delFlag;
 	}
 }
