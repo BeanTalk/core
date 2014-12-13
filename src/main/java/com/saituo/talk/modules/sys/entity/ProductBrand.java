@@ -18,7 +18,7 @@ import org.hibernate.annotations.Where;
 import com.saituo.talk.common.persistence.IdEntity;
 
 @Entity
-@Table(name = "st_product_brand_bak")
+@Table(name = "st_product_brand")
 @DynamicInsert
 @DynamicUpdate
 public class ProductBrand extends IdEntity<ProductBrand> {

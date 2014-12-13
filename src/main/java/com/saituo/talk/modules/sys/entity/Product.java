@@ -20,7 +20,7 @@ import com.saituo.talk.common.utils.excel.annotation.ExcelField;
  * @version 2014-12-07
  */
 @Entity
-@Table(name = "st_product_bak")
+@Table(name = "st_product")
 @DynamicInsert
 @DynamicUpdate
 public class Product extends IdEntity<Product> {
