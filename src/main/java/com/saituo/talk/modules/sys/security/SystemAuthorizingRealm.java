@@ -68,9 +68,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 			return null;
 		}
 
-		byte[] salt = Encodes.decodeHex(user.getPassword().substring(0, 16));
-		return new SimpleAuthenticationInfo(new Principal(user), user.getPassword().substring(16),
-				ByteSource.Util.bytes(salt), getName());
+		return new SimpleAuthenticationInfo(new Principal(user), user.getPassword(), getName());
 	}
 
 	/**

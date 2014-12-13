@@ -110,7 +110,7 @@ public class SystemService extends BaseService {
 	}
 
 	@Transactional(readOnly = false)
-	public void deleteUser(String id) {
+	public void deleteUser(Integer id) {
 		userDao.deleteById(id);
 	}
 
@@ -127,11 +127,15 @@ public class SystemService extends BaseService {
 
 	/**
 	 * 生成安全的密码，生成随机的16位salt并经过1024次 sha-1 hash
+	 * 
+	 * public static String entryptPassword(String plainPassword) { byte[] salt
+	 * = Digests.generateSalt(SALT_SIZE); byte[] hashPassword =
+	 * Digests.sha1(plainPassword.getBytes(), salt, HASH_INTERATIONS); return
+	 * Encodes.encodeHex(salt) + Encodes.encodeHex(hashPassword); }
 	 */
+
 	public static String entryptPassword(String plainPassword) {
-		byte[] salt = Digests.generateSalt(SALT_SIZE);
-		byte[] hashPassword = Digests.sha1(plainPassword.getBytes(), salt, HASH_INTERATIONS);
-		return Encodes.encodeHex(salt) + Encodes.encodeHex(hashPassword);
+		return plainPassword;
 	}
 
 	/**

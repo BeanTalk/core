@@ -137,7 +137,7 @@ public class UserController extends BaseController {
 	}
 	@RequiresPermissions("sys:user:edit")
 	@RequestMapping("delete")
-	public String delete(String id, RedirectAttributes redirectAttributes) {
+	public String delete(Integer id, RedirectAttributes redirectAttributes) {
 
 		if (UserUtils.getUser().getId().equals(id)) {
 			addMessage(redirectAttributes, "删除用户失败, 不允许删除当前用户");
