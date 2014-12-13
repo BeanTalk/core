@@ -29,19 +29,30 @@ public class ProductBrandService {
 		DetachedCriteria dc = productBrandDao.createDetachedCriteria();
 
 		if (StringUtils.isNotEmpty(productBrand.getBrandName())) {
-			dc.add(Restrictions.like("productBrand.brandName", "%" + productBrand.getBrandName() + "%"));
+			dc.add(Restrictions.like("brandName", "%" + productBrand.getBrandName() + "%"));
 		}
 
 		dc.add(Restrictions.eq(BaseEntity.FIELD_DEL_FLAG, BaseEntity.DEL_FLAG_NORMAL));
 		if (!StringUtils.isNotEmpty(page.getOrderBy())) {
-			dc.addOrder(Order.asc("productBrand.brandName"));
+			dc.addOrder(Order.asc("brandName"));
 		}
 		return productBrandDao.find(page, dc);
 	}
 
+	public long count(ProductBrand productBrand) {
+
+		DetachedCriteria dc = productBrandDao.createDetachedCriteria();
+		if (StringUtils.isNotEmpty(productBrand.getBrandName())) {
+			dc.add(Restrictions.eq("brandName", productBrand.getBrandName()));
+		}
+		dc.add(Restrictions.eq(BaseEntity.FIELD_DEL_FLAG, BaseEntity.DEL_FLAG_NORMAL));
+		return productBrandDao.count(dc);
+
+	}
+
 	public Map<Integer, String> getProductBrandMap() {
 		Map<Integer, String> mapData = Maps.newHashMap();
-		List<ProductBrand> productBrandList = productBrandDao.findAll();
+		List<ProductBrand> productBrandList = productBrandDao.findBrandIdAndNameMap();
 		for (ProductBrand productBrand : productBrandList) {
 			mapData.put(productBrand.getId(), productBrand.getBrandName());
 		}
@@ -64,7 +75,7 @@ public class ProductBrandService {
 
 		DetachedCriteria dc = productBrandDao.createDetachedCriteria();
 		if (StringUtils.isNotEmpty(productBrand.getBrandName())) {
-			dc.add(Restrictions.eq("productBrand.brandName", productBrand.getBrandName()));
+			dc.add(Restrictions.eq("brandName", productBrand.getBrandName()));
 		}
 		return productBrandDao.find(dc).get(0);
 	}
@@ -76,6 +87,8 @@ public class ProductBrandService {
 
 	@Transactional(readOnly = false)
 	public void delete(Integer id) {
-		productBrandDao.deleteById(id);
+		ProductBrand pb = new ProductBrand(id);
+		productBrandDao.clear();
+		productBrandDao.deleteReal(pb);
 	}
 }

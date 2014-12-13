@@ -1,6 +1,5 @@
 package com.saituo.talk.modules.sys.entity;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -27,10 +26,6 @@ public class ProductBrand extends IdEntity<ProductBrand> {
 
 	private String brandName;
 
-	private String acceptPerson;
-
-	private Date acceptDate;
-
 	private Double buyDiscount;
 
 	private Double weightDiscount;
@@ -39,6 +34,13 @@ public class ProductBrand extends IdEntity<ProductBrand> {
 
 	private List<Product> products;
 
+	public ProductBrand() {
+	}
+
+	public ProductBrand(Integer id) {
+		this.id = id;
+	}
+
 	@Column(name = "brand_name")
 	public String getBrandName() {
 		return brandName;
@@ -46,24 +48,6 @@ public class ProductBrand extends IdEntity<ProductBrand> {
 
 	public void setBrandName(String brandName) {
 		this.brandName = brandName;
-	}
-
-	@Column(name = "accept_person")
-	public String getAcceptPerson() {
-		return acceptPerson;
-	}
-
-	public void setAcceptPerson(String acceptPerson) {
-		this.acceptPerson = acceptPerson;
-	}
-
-	@Column(name = "accept_date")
-	public Date getAcceptDate() {
-		return acceptDate;
-	}
-
-	public void setAcceptDate(Date acceptDate) {
-		this.acceptDate = acceptDate;
 	}
 
 	@Column(name = "buy_discount")

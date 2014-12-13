@@ -12,7 +12,13 @@ import com.saituo.talk.modules.sys.entity.ProductBrand;
 @Repository
 public class ProductBrandDao extends BaseDao<ProductBrand> {
 
-	public List<String> findBrandNameList(){
-		return find("select brandName from ProductBrand where delFlag=:p1 group by brandName", new Parameter(Dict.DEL_FLAG_NORMAL));
+	public List<String> findBrandNameList() {
+		return find("select brandName from ProductBrand where delFlag=:p1 group by brandName", new Parameter(
+				Dict.DEL_FLAG_NORMAL));
 	}
+
+	public List<ProductBrand> findBrandIdAndNameMap() {
+		return find("select distinct p from ProductBrand p where delFlag=:p1", new Parameter(Dict.DEL_FLAG_NORMAL));
+	}
+
 }

@@ -308,6 +308,17 @@ public class BaseDao<T> {
 	}
 
 	/**
+	 * 彻底删除
+	 * 
+	 * @param id
+	 * @return
+	 * @return
+	 */
+	public void deleteReal(T entity) {
+		getSession().delete(entity);
+	}
+
+	/**
 	 * 逻辑删除
 	 * 
 	 * @param id

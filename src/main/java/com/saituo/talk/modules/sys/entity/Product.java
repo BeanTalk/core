@@ -8,6 +8,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.saituo.talk.common.persistence.IdEntity;
@@ -58,10 +61,10 @@ public class Product extends IdEntity<Product> {
 	}
 
 	@ManyToOne
-	// @JoinColumn(name = "brand_id", insertable = false, updatable = false,
-	// nullable = false)
 	@JoinColumn(name = "brand_id")
 	@ExcelField(title = "品牌", align = 2, sort = 20)
+	@NotFound(action = NotFoundAction.IGNORE)
+	@Where(clause = "del_flag='" + DEL_FLAG_NORMAL + "'")
 	public ProductBrand getBrand() {
 		return brand;
 	}
