@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 
+import com.saituo.talk.common.utils.excel.annotation.ExcelField;
+
 /**
  * 数据Entity类
  * 
@@ -24,6 +26,7 @@ public abstract class IdEntity<T> extends DataEntity<T> implements Serializable 
 
 	private static final long serialVersionUID = 1L;
 
+	@ExcelField(title = "产品编号", align = 2, sort = 10)
 	protected Integer id; // 编号
 
 	public IdEntity() {

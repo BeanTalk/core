@@ -25,7 +25,7 @@ public class ProductBrand extends IdEntity<ProductBrand> {
 	private static final long serialVersionUID = -4521867732802841977L;
 
 	private String brandName;
-
+	
 	private Double buyDiscount;
 
 	private Double weightDiscount;
