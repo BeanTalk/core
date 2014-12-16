@@ -53,6 +53,7 @@ public class Area extends IdEntity<Area> {
 
 	private List<Office> officeList = Lists.newArrayList(); // 部门列表
 	private List<Area> childList = Lists.newArrayList(); // 拥有子区域列表
+	private List<Gift> giftList = Lists.newArrayList(); // 拥有的礼品列表
 
 	public Area() {
 		super();
@@ -61,6 +62,17 @@ public class Area extends IdEntity<Area> {
 	public Area(Integer id) {
 		this();
 		this.id = id;
+	}
+
+	@OneToMany(mappedBy = "area", fetch = FetchType.LAZY)
+	@Where(clause = "del_flag='" + DEL_FLAG_NORMAL + "'")
+	@NotFound(action = NotFoundAction.IGNORE)
+	public List<Gift> getGiftList() {
+		return giftList;
+	}
+
+	public void setGiftList(List<Gift> giftList) {
+		this.giftList = giftList;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)

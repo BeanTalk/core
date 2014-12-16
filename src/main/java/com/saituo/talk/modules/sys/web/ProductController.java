@@ -134,15 +134,15 @@ public class ProductController extends BaseController {
 						failureNum++;
 					}
 				} catch (Exception ex) {
-					failureMsg.append("<br/>登录名 " + product.getProductName() + " 导入失败：" + ex.getMessage());
+					failureMsg.append("<br/>产品 " + product.getProductName() + " 导入失败：" + ex.getMessage());
 				}
 			}
 			if (failureNum > 0) {
-				failureMsg.insert(0, "，失败 " + failureNum + " 条用户，导入信息如下：");
+				failureMsg.insert(0, "，失败 " + failureNum + " 条产品，导入信息如下：");
 			}
-			addMessage(redirectAttributes, "已成功导入 " + successNum + " 条用户" + failureMsg);
+			addMessage(redirectAttributes, "已成功导入 " + successNum + " 条产品" + failureMsg);
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导入用户失败！失败信息：" + e.getMessage());
+			addMessage(redirectAttributes, "导入产品失败！失败信息：" + e.getMessage());
 		}
 		return "redirect:" + Global.getAdminPath() + "/order/product/?repage";
 	}

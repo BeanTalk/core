@@ -34,7 +34,7 @@ public class ProductServiceTest extends SpringTransactionalContextTests {
 	public void save() {
 		Product product = productService.get(102);
 		ProductBrand productBrand = new ProductBrand();
-		productBrand.setId(3);
+		productBrand.setId(1);
 		product.setBrand(productBrand);
 		productService.save(product);
 	}
