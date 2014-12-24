@@ -14,7 +14,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/order/gift/">礼品列表</a></li>
-		<li class="active"><a href="form?id=${brand.id}">礼品<shiro:hasPermission name="order:gift:edit">${not empty brand.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="order:brand:edit">查看</shiro:lacksPermission></a></li>
+		<li class="active"><a href="form?id=${gift.id}">礼品<shiro:hasPermission name="order:gift:edit">${not empty gift.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="order:gift:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	
 	<form:form id="inputForm" modelAttribute="gift" action="${ctx}/order/gift/save" method="post" class="form-horizontal">

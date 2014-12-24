@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-	<title>品牌管理</title>
+	<title>礼品管理</title>
 	<meta name="decorator" content="default"/>
 	<%@include file="/WEB-INF/views/include/dialog.jsp" %>
 	<script type="text/javascript">
@@ -42,8 +42,8 @@
 	</div>
 	
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/order/gift/">品牌列表</a></li>
-		<shiro:hasPermission name="order:gift:edit"><li><a href="${ctx}/order/gift/form">品牌添加</a></li></shiro:hasPermission>
+		<li class="active"><a href="${ctx}/order/gift/">礼品列表</a></li>
+		<shiro:hasPermission name="order:gift:edit"><li><a href="${ctx}/order/gift/form">礼品添加</a></li></shiro:hasPermission>
 	</ul>
 	
 	<form:form id="searchForm" modelAttribute="gift" action="${ctx}/order/gift/" method="post" class="breadcrumb form-search">

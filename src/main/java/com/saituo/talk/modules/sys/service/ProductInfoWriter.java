@@ -65,6 +65,7 @@ public class ProductInfoWriter {
 				Field.Store.YES));
 		doc.add(new TextField("product_name", product.getProductName(), Field.Store.YES));
 		doc.add(new TextField("product_num", product.getProductNum(), Field.Store.YES));
+		doc.add(new TextField("brand_name", product.getBrand().getBrandName(), Field.Store.YES));
 		doc.add(new IntField("product_id", product.getId(), Field.Store.YES));
 		doc.add(new TextField("spec_value", product.getSpecValue(), Field.Store.YES));
 		doc.add(new TextField("unit_value", product.getUnitValue(), Field.Store.YES));
