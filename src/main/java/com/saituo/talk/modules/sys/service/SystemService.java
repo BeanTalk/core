@@ -3,6 +3,7 @@ package com.saituo.talk.modules.sys.service;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -135,9 +136,9 @@ public class SystemService extends BaseService {
 	 */
 
 	public static String entryptPassword(String plainPassword) {
-		return plainPassword;
+		return DigestUtils.md5Hex(plainPassword);
 	}
-
+	
 	/**
 	 * 验证密码
 	 * 
