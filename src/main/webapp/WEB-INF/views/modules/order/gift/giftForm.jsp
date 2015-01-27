@@ -33,7 +33,7 @@
 				<form:input path="giftName" htmlEscape="false" maxlength="50" class="required"/>
 			</div>
 		</div>
-		<div class="control-group" style="display: none">
+		<div class="control-group">
 			<label class="control-label" for="giftStatus">礼品状态:</label>
 			<div class="controls">
 				<form:select path="giftStatus">
