@@ -70,7 +70,7 @@ public class AgencyController extends BaseController {
 			return form(agency, model);
 		}
 		agencyService.save(agency);
-		addMessage(redirectAttributes, "保存品牌'" + agency.getAgentName() + "'成功");
+		addMessage(redirectAttributes, "保存经销商'" + agency.getAgentName() + "'成功");
 		return "redirect:" + Global.getAdminPath() + "/order/agent/";
 	}
 
@@ -78,7 +78,7 @@ public class AgencyController extends BaseController {
 	@RequestMapping(value = "delete")
 	public String delete(String id, RedirectAttributes redirectAttributes) {
 		agencyService.delete(Integer.valueOf(id));
-		addMessage(redirectAttributes, "删除品牌成功");
+		addMessage(redirectAttributes, "删除经销商成功");
 		return "redirect:" + Global.getAdminPath() + "/order/agent/";
 	}
 
@@ -89,7 +89,7 @@ public class AgencyController extends BaseController {
 		try {
 			String fileName = "数据" + DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
 			List<Agency> page = agencyService.findAll();
-			new ExportExcel("数据", ProductBrand.class).setDataList(page).write(response, fileName).dispose();
+			new ExportExcel("", ProductBrand.class).setDataList(page).write(response, fileName).dispose();
 			return null;
 		} catch (Exception e) {
 			addMessage(redirectAttributes, "导出数据失败！失败信息：" + e.getMessage());
@@ -145,7 +145,7 @@ public class AgencyController extends BaseController {
 			String fileName = "数据导入模板.xlsx";
 			List<Agency> list = Lists.newArrayList();
 			list.add(agencyService.get(1));
-			new ExportExcel("经销商数据", Agency.class, 2).setDataList(list).write(response, fileName).dispose();
+			new ExportExcel("", Agency.class, 2).setDataList(list).write(response, fileName).dispose();
 			return null;
 		} catch (Exception e) {
 			addMessage(redirectAttributes, "导入模板下载失败！失败信息：" + e.getMessage());

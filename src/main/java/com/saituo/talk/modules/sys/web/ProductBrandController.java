@@ -26,8 +26,10 @@ import com.saituo.talk.common.utils.StringUtils;
 import com.saituo.talk.common.utils.excel.ExportExcel;
 import com.saituo.talk.common.utils.excel.ImportExcel;
 import com.saituo.talk.common.web.BaseController;
+import com.saituo.talk.modules.sys.entity.Product;
 import com.saituo.talk.modules.sys.entity.ProductBrand;
 import com.saituo.talk.modules.sys.service.ProductBrandService;
+import com.saituo.talk.modules.sys.service.ProductService;
 
 @Controller
 @RequestMapping(value = "${adminPath}/order/brand")
@@ -35,6 +37,9 @@ public class ProductBrandController extends BaseController {
 
 	@Autowired
 	private ProductBrandService productBrandService;
+
+	@Autowired
+	private ProductService productService;
 
 	@ModelAttribute("productBrand")
 	public ProductBrand get(@RequestParam(required = false) String id) {
@@ -77,11 +82,21 @@ public class ProductBrandController extends BaseController {
 	@RequiresPermissions("order:brand:edit")
 	@RequestMapping(value = "delete")
 	public String delete(String id, RedirectAttributes redirectAttributes) {
-		productBrandService.delete(Integer.valueOf(id));
-		addMessage(redirectAttributes, "删除品牌成功");
+
+		ProductBrand brand = new ProductBrand();
+		brand.setId(Integer.valueOf(id));
+
+		Product product = new Product();
+		product.setBrand(brand);
+
+		if (productService.count(product) != 0) {
+			addMessage(redirectAttributes, "该品牌下存在产品信息");
+		} else {
+			productBrandService.delete(Integer.valueOf(id));
+			addMessage(redirectAttributes, "删除品牌成功");
+		}
 		return "redirect:" + Global.getAdminPath() + "/order/brand/";
 	}
-
 	@RequiresPermissions("order:brand:view")
 	@RequestMapping(value = "export", method = RequestMethod.POST)
 	public String exportFile(ProductBrand productBrand, HttpServletRequest request, HttpServletResponse response,

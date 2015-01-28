@@ -51,6 +51,9 @@ public class ProductService {
 		if (StringUtils.isNotEmpty(product.getProductName())) {
 			dc.add(Restrictions.eq("productName", product.getProductName()));
 		}
+		if (product != null && product.getBrand() != null && product.getBrand().getId() != null) {
+			dc.add(Restrictions.eq("brand.id", product.getBrand().getId()));
+		}
 		dc.add(Restrictions.eq(BaseEntity.FIELD_DEL_FLAG, BaseEntity.DEL_FLAG_NORMAL));
 		return productDao.count(dc);
 

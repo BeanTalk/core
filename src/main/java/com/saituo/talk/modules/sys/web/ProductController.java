@@ -118,14 +118,22 @@ public class ProductController extends BaseController {
 			List<Product> list = ei.getDataList(Product.class);
 			for (Product product : list) {
 				try {
-					if (productService.count(product) == 0) {
-						BeanValidators.validateWithException(validator, product);
-						productService.save(product);
-						successNum++;
-					} else {
+
+					if (product.getBrand() == null) {
+						failureMsg.append("<br/>产品名 " + product.getProductName() + " 的品牌不存在; ");
+						failureNum++;
+						continue;
+					}
+					if (productService.count(product) != 0) {
 						failureMsg.append("<br/>产品名 " + product.getProductName() + " 已存在; ");
 						failureNum++;
+						continue;
 					}
+
+					BeanValidators.validateWithException(validator, product);
+					productService.save(product);
+					successNum++;
+
 				} catch (ConstraintViolationException ex) {
 					failureMsg.append("<br/>产品 " + product.getProductName() + " 导入失败：");
 					List<String> messageList = BeanValidators.extractPropertyAndMessageAsList(ex, ": ");
@@ -154,7 +162,7 @@ public class ProductController extends BaseController {
 			String fileName = "产品数据导入模板.xlsx";
 			List<Product> list = Lists.newArrayList();
 			list.add(productService.get(1));
-			new ExportExcel("产品数据", Product.class, 2).setDataList(list).write(response, fileName).dispose();
+			new ExportExcel("", Product.class, 2).setDataList(list).write(response, fileName).dispose();
 			return null;
 		} catch (Exception e) {
 			addMessage(redirectAttributes, "导入模板下载失败！失败信息：" + e.getMessage());
