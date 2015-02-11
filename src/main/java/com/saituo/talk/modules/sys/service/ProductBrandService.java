@@ -42,8 +42,8 @@ public class ProductBrandService {
 	public long count(ProductBrand productBrand) {
 
 		DetachedCriteria dc = productBrandDao.createDetachedCriteria();
-		if (StringUtils.isNotEmpty(productBrand.getBrandName())) {
-			dc.add(Restrictions.eq("brandName", productBrand.getBrandName()));
+		if (StringUtils.isNotEmpty(productBrand.getUniqueBrandName())) {
+			dc.add(Restrictions.eq("uniqueBrandName", productBrand.getUniqueBrandName()));
 		}
 		dc.add(Restrictions.eq(BaseEntity.FIELD_DEL_FLAG, BaseEntity.DEL_FLAG_NORMAL));
 		return productBrandDao.count(dc);
@@ -54,7 +54,7 @@ public class ProductBrandService {
 		Map<Integer, String> mapData = Maps.newHashMap();
 		List<ProductBrand> productBrandList = productBrandDao.findBrandIdAndNameMap();
 		for (ProductBrand productBrand : productBrandList) {
-			mapData.put(productBrand.getId(), productBrand.getBrandName());
+			mapData.put(productBrand.getId(), productBrand.getBrandName() + ":" + productBrand.getUniqueBrandName());
 		}
 		return mapData;
 	}

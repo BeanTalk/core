@@ -49,7 +49,7 @@ public class ProductService {
 
 		DetachedCriteria dc = productDao.createDetachedCriteria();
 		if (StringUtils.isNotEmpty(product.getProductName())) {
-			dc.add(Restrictions.eq("productName", product.getProductName()));
+			dc.add(Restrictions.eq("productNum", product.getProductNum()));
 		}
 		if (product != null && product.getBrand() != null && product.getBrand().getId() != null) {
 			dc.add(Restrictions.eq("brand.id", product.getBrand().getId()));
@@ -78,6 +78,11 @@ public class ProductService {
 	@Transactional(readOnly = false)
 	public void delete(Integer id) {
 		productDao.delete(id);
+	}
+
+	@Transactional(readOnly = false)
+	public void truncate() {
+		productDao.truncate();
 	}
 
 }

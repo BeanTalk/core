@@ -58,6 +58,7 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
+				<th>品牌编码名称</th>
 				<th>品牌名称</th>
 				<th>采购折扣</th>
 				<th>加权折扣</th>
@@ -70,7 +71,8 @@
 		<tbody>
 			<c:forEach items="${page.list}" var="productBrand">
 				<tr>
-					<td><a href="${ctx}/order/brand/form?id=${productBrand.id}">${productBrand.brandName}</a></td>
+					<td><a href="${ctx}/order/brand/form?id=${productBrand.id}">${productBrand.uniqueBrandName}</a></td>
+					<td>${productBrand.brandName}</td>
 					<td>${productBrand.buyDiscount}</td>
 					<td>${productBrand.weightDiscount}</td>
 					<td>${productBrand.limitDiscount}</td>

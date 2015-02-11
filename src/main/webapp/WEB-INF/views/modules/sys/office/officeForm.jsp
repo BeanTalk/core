@@ -50,6 +50,14 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label" for="ifShow">是否显示下拉框:</label>
+			<div class="controls">
+				<form:select path="ifShow">
+					<form:options items="${fns:getDictList('show_hide')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label" for="address">联系地址:</label>
 			<div class="controls">
 				<form:input path="address" htmlEscape="false" maxlength="50"/>

@@ -13,7 +13,7 @@ public class ProductBrandType {
 	 */
 	public static Object getValue(String val) {
 		for (ProductBrand e : productBrandService.findAll()) {
-			if (val.equals(e.getBrandName())) {
+			if (val.equals(e.getUniqueBrandName())) {
 				return e;
 			}
 		}

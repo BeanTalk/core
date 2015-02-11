@@ -70,6 +70,7 @@ public class ProductInfoWriter {
 		doc.add(new TextField("spec_value", product.getSpecValue(), Field.Store.YES));
 		doc.add(new TextField("unit_value", product.getUnitValue(), Field.Store.YES));
 		doc.add(new StringField("catalog_fee", String.valueOf(product.getCatalogFee()), Field.Store.YES));
+		doc.add(new StringField("weight_discount", String.valueOf(product.getBrand().getWeightDiscount()), Field.Store.YES));
 		try {
 			indexWriter.addDocument(doc);
 		} catch (IOException e) {

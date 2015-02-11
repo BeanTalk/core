@@ -78,6 +78,13 @@ public class ProductController extends BaseController {
 			return form(product, model);
 		}
 
+		if (productService.count(product) != 0) {
+			addMessage(model, "该产品,'" + product.getProductName() + "的货号与品牌已经存在!");
+			return form(product, model);
+		}
+
+		BeanValidators.validateWithException(validator, product);
+
 		productService.save(product);
 		addMessage(redirectAttributes, "保存产品'" + product.getProductName() + "'成功");
 		return "redirect:" + Global.getAdminPath() + "/order/product/";
@@ -98,7 +105,7 @@ public class ProductController extends BaseController {
 		try {
 			String fileName = "产品数据" + DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
 			List<Product> page = productService.findAll();
-			new ExportExcel("产品数据", Product.class).setDataList(page).write(response, fileName).dispose();
+			new ExportExcel("", Product.class).setDataList(page).write(response, fileName).dispose();
 			return null;
 		} catch (Exception e) {
 			addMessage(redirectAttributes, "导出数据失败！失败信息：" + e.getMessage());
@@ -114,18 +121,17 @@ public class ProductController extends BaseController {
 			int successNum = 0;
 			int failureNum = 0;
 			StringBuilder failureMsg = new StringBuilder();
-			ImportExcel ei = new ImportExcel(file, 1, 0);
+			ImportExcel ei = new ImportExcel(file, 0, 0);
 			List<Product> list = ei.getDataList(Product.class);
 			for (Product product : list) {
 				try {
-
 					if (product.getBrand() == null) {
 						failureMsg.append("<br/>产品名 " + product.getProductName() + " 的品牌不存在; ");
 						failureNum++;
 						continue;
 					}
 					if (productService.count(product) != 0) {
-						failureMsg.append("<br/>产品名 " + product.getProductName() + " 已存在; ");
+						failureMsg.append("<br/>产品名 " + product.getProductName() + " 的货号与品牌已存在; ");
 						failureNum++;
 						continue;
 					}
@@ -175,6 +181,13 @@ public class ProductController extends BaseController {
 	public String createIndex(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
 		productInfoWriter.createIndex();
 		addMessage(redirectAttributes, "产品索引已重建完毕!");
+		return "redirect:" + Global.getAdminPath() + "/order/product/";
+	}
+
+	@RequiresPermissions("order:product:edit")
+	@RequestMapping(value = "truncate")
+	public String truncateProduct(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+		productService.truncate();
 		return "redirect:" + Global.getAdminPath() + "/order/product/";
 	}
 }

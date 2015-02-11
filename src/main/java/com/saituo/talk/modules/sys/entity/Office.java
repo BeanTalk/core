@@ -51,6 +51,7 @@ public class Office extends IdEntity<Office> {
 	private Area area; // 归属区域
 	private String name; // 机构名称
 	private String type; // 机构类型（1：公司；2：部门；3：小组）
+	private String ifShow; // 是否下拉框中显示该组织
 	private String address; // 联系地址
 	private String code; // 机构编码
 	private String zipCode; // 邮政编码
@@ -129,6 +130,16 @@ public class Office extends IdEntity<Office> {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	@Column(name = "if_show")
+	@Length(min = 1, max = 1)
+	public String getIfShow() {
+		return ifShow;
+	}
+
+	public void setIfShow(String ifShow) {
+		this.ifShow = ifShow;
 	}
 
 	@Length(min = 0, max = 255)

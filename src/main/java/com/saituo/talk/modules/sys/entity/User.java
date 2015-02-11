@@ -56,7 +56,6 @@ public class User extends IdEntity<User> {
 	private Office office; // 归属部门
 	private String loginName;// 登录名
 	private String password;// 密码
-	private String no; // 工号
 	private String name; // 姓名
 	private String email; // 邮箱
 	private String phone; // 电话
@@ -124,16 +123,6 @@ public class User extends IdEntity<User> {
 	@ExcelField(title = "姓名", align = 2, sort = 40)
 	public String getName() {
 		return name;
-	}
-
-	@Length(min = 1, max = 100)
-	@ExcelField(title = "工号", align = 2, sort = 45)
-	public String getNo() {
-		return no;
-	}
-
-	public void setNo(String no) {
-		this.no = no;
 	}
 
 	public String getForward() {
@@ -275,8 +264,4 @@ public class User extends IdEntity<User> {
 		return id == 1;
 	}
 
-	// @Override
-	// public String toString() {
-	// return ToStringBuilder.reflectionToString(this);
-	// }
 }

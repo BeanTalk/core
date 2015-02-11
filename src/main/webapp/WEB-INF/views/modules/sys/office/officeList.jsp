@@ -32,16 +32,17 @@
 		<tr>
 			<th>机构名称</th>
 			<th>归属区域</th>
+			<th>是否在下拉框中显示</th>
 			<th>备注</th>
 			<shiro:hasPermission name="sys:office:edit">
 				<th>操作</th>
 			</shiro:hasPermission>
 		</tr>
 		<c:forEach items="${list}" var="office">
-			<tr id="${office.id}"
-				pId="${office.parent.id ne requestScope.office.id?office.parent.id:'0'}">
+			<tr id="${office.id}" pId="${office.parent.id ne requestScope.office.id?office.parent.id:'0'}">
 				<td><a href="${ctx}/sys/office/form?id=${office.id}">${office.name}</a></td>
 				<td>${office.area.name}</td>
+				<td>${office.ifShow eq '1'?'显示':'隐藏'}</td>
 				<td>${office.remarks}</td>
 				<shiro:hasPermission name="sys:office:edit">
 					<td><a href="${ctx}/sys/office/form?id=${office.id}">修改</a> <a

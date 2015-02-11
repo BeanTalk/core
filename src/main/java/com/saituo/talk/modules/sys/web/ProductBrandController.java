@@ -74,8 +74,15 @@ public class ProductBrandController extends BaseController {
 		if (!beanValidator(model, productBrand)) {
 			return form(productBrand, model);
 		}
-		productBrandService.save(productBrand);
-		addMessage(redirectAttributes, "保存品牌'" + productBrand.getBrandName() + "'成功");
+
+		if (productBrandService.count(productBrand) != 0) {
+			addMessage(model, "品牌编码名称 '" + productBrand.getUniqueBrandName() + "'重复!");
+			return form(productBrand, model);
+		} else {
+			productBrandService.save(productBrand);
+			addMessage(redirectAttributes, "保存品牌编码名称'" + productBrand.getUniqueBrandName() + "'成功");
+		}
+
 		return "redirect:" + Global.getAdminPath() + "/order/brand/";
 	}
 
@@ -97,6 +104,7 @@ public class ProductBrandController extends BaseController {
 		}
 		return "redirect:" + Global.getAdminPath() + "/order/brand/";
 	}
+
 	@RequiresPermissions("order:brand:view")
 	@RequestMapping(value = "export", method = RequestMethod.POST)
 	public String exportFile(ProductBrand productBrand, HttpServletRequest request, HttpServletResponse response,
@@ -104,7 +112,7 @@ public class ProductBrandController extends BaseController {
 		try {
 			String fileName = "品牌数据" + DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
 			List<ProductBrand> page = productBrandService.findAll();
-			new ExportExcel("品牌数据", ProductBrand.class).setDataList(page).write(response, fileName).dispose();
+			new ExportExcel("", ProductBrand.class).setDataList(page).write(response, fileName).dispose();
 			return null;
 		} catch (Exception e) {
 			addMessage(redirectAttributes, "导出数据失败！失败信息：" + e.getMessage());
@@ -120,7 +128,7 @@ public class ProductBrandController extends BaseController {
 			int successNum = 0;
 			int failureNum = 0;
 			StringBuilder failureMsg = new StringBuilder();
-			ImportExcel ei = new ImportExcel(file, 1, 0);
+			ImportExcel ei = new ImportExcel(file, 0, 0);
 			List<ProductBrand> list = ei.getDataList(ProductBrand.class);
 			for (ProductBrand productBrand : list) {
 				try {
@@ -129,22 +137,22 @@ public class ProductBrandController extends BaseController {
 						productBrandService.save(productBrand);
 						successNum++;
 					} else {
-						failureMsg.append("<br/>品牌名 " + productBrand.getBrandName() + " 已存在; ");
+						failureMsg.append("<br/>品牌编码名称, " + productBrand.getUniqueBrandName() + " 已存在; ");
 						failureNum++;
 					}
 				} catch (ConstraintViolationException ex) {
-					failureMsg.append("<br/>品牌 " + productBrand.getBrandName() + " 导入失败：");
+					failureMsg.append("<br/>品牌 " + productBrand.getUniqueBrandName() + " 导入失败：");
 					List<String> messageList = BeanValidators.extractPropertyAndMessageAsList(ex, ": ");
 					for (String message : messageList) {
 						failureMsg.append(message + "; ");
 						failureNum++;
 					}
 				} catch (Exception ex) {
-					failureMsg.append("<br/>登录名 " + productBrand.getBrandName() + " 导入失败：" + ex.getMessage());
+					failureMsg.append("<br/>品牌 " + productBrand.getUniqueBrandName() + " 导入失败：" + ex.getMessage());
 				}
 			}
 			if (failureNum > 0) {
-				failureMsg.insert(0, "，失败 " + failureNum + " 条用户，导入信息如下：");
+				failureMsg.insert(0, ", 失败 " + failureNum + " 条用户，导入信息如下：");
 			}
 			addMessage(redirectAttributes, "已成功导入 " + successNum + " 条用户" + failureMsg);
 		} catch (Exception e) {
@@ -160,7 +168,7 @@ public class ProductBrandController extends BaseController {
 			String fileName = "品牌数据导入模板.xlsx";
 			List<ProductBrand> list = Lists.newArrayList();
 			list.add(productBrandService.get(1));
-			new ExportExcel("品牌数据", ProductBrand.class, 2).setDataList(list).write(response, fileName).dispose();
+			new ExportExcel("", ProductBrand.class, 2).setDataList(list).write(response, fileName).dispose();
 			return null;
 		} catch (Exception e) {
 			addMessage(redirectAttributes, "导入模板下载失败！失败信息：" + e.getMessage());

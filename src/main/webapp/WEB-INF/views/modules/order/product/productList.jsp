@@ -29,6 +29,19 @@
 				},{buttonsFocus:1});
 				top.$('.jbox-body .jbox-icon').css('top','55px');
 			});
+			
+			$("#btnTrunc").click(function(){
+				top.$.jBox.confirm("确认要清空产品信息吗？","系统提示",function(v,h,f){
+					if(v == "ok"){
+						$("#searchForm").attr("action","${ctx}/order/product/truncate").submit();
+					}
+				},{buttonsFocus:1});
+				top.$('.jbox-body .jbox-icon').css('top','55px');
+			});
+			
+			
+			
+			
 		});
 	
 		function page(n,s){
@@ -69,6 +82,7 @@
 			&nbsp;<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" onclick="return page();"/>
 			&nbsp;<input id="btnExport" class="btn btn-primary" type="button" value="导出"/>
 			&nbsp;<input id="btnImport" class="btn btn-primary" type="button" value="导入"/>
+			&nbsp;<input id="btnTrunc" class="btn btn-primary" type="button" value="清空"/>
 			&nbsp;<input id="btnIndex" class="btn btn-primary" type="button" value="重建索引"/>
 		</div>
 	</form:form>
@@ -78,11 +92,10 @@
 			<tr>
 				<th>产品名称</th>
 				<th>货号</th>
+				<th>品牌编码名称</th>
 				<th>产品品牌</th>
 				<th>规格</th>
-				<th>单位</th>
 				<th>目录价</th>
-				<th>备货价</th>
 				<shiro:hasPermission name="order:product:edit">
 					<th>操作</th>
 				</shiro:hasPermission>
@@ -93,11 +106,10 @@
 				<tr>
 					<td><a href="${ctx}/order/product/form?id=${product.id}">${product.productName}</a></td>
 					<td>${product.productNum}</td>
+					<td>${product.brand.uniqueBrandName}</td>
 					<td>${product.brand.brandName}</td>
 					<td>${product.specValue}</td>
-					<td>${product.unitValue}</td>
 					<td>${product.catalogFee}</td>
-					<td>${product.deliveryFee}</td>
 					<shiro:hasPermission name="order:product:edit"><td>
 	    				<a href="${ctx}/order/product/form?id=${product.id}">修改</a>
 						<a href="${ctx}/order/product/delete?id=${product.id}" onclick="return confirmx('确认要删除产品吗？', this.href)">删除</a>

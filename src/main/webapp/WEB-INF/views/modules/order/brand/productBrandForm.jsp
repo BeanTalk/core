@@ -27,6 +27,12 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label" for="uniqueBrandName">品牌编码名称:</label>
+			<div class="controls">
+				<form:input path="uniqueBrandName" htmlEscape="false" maxlength="50" class="required"/>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label" for="buyDiscount">采购折扣:</label>
 			<div class="controls">
 				<form:input path="buyDiscount" htmlEscape="false" maxlength="50" class="number"/>

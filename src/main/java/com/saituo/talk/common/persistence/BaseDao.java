@@ -703,4 +703,9 @@ public class BaseDao<T> {
 		return dc;
 	}
 
+	public void createNativeQuery(String sql) {
+		Query query = getSession().createSQLQuery(sql);
+		query.executeUpdate();
+	}
+
 }
