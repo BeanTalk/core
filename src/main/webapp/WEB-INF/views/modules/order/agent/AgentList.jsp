@@ -69,7 +69,7 @@
 					<td><a href="${ctx}/order/agent/form?id=${agency.id}">${agency.agentName}</a></td>
 					<shiro:hasPermission name="order:agent:edit"><td>
 	    				<a href="${ctx}/order/agent/form?id=${agency.id}">修改</a>
-						<a href="${ctx}/order/agent/delete?id=${agency.id}" onclick="return confirmx('确认要删除产品吗？', this.href)">删除</a>
+						<a href="${ctx}/order/agent/delete?id=${agency.id}" onclick="return confirmx('确认要删除该经销商吗？', this.href)">删除</a>
 					</td></shiro:hasPermission>
 				</tr>
 			</c:forEach>
