@@ -3,6 +3,7 @@ package com.saituo.talk.modules.sys.service;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.SecurityUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -48,7 +49,7 @@ public class SystemService extends BaseService {
 	@Autowired
 	private SystemAuthorizingRealm systemRealm;
 
-	public User getUser(String id) {
+	public User getUser(Integer id) {
 		return userDao.get(id);
 	}
 
@@ -57,14 +58,8 @@ public class SystemService extends BaseService {
 		User currentUser = UserUtils.getUser();
 		DetachedCriteria dc = userDao.createDetachedCriteria();
 
-		dc.createAlias("company", "company");
-		if (user.getCompany() != null && StringUtils.isNotBlank(user.getCompany().getId())) {
-			dc.add(Restrictions.or(Restrictions.eq("company.id", user.getCompany().getId()),
-					Restrictions.like("company.parentIds", "%," + user.getCompany().getId() + ",%")));
-		}
-
 		dc.createAlias("office", "office");
-		if (user.getOffice() != null && StringUtils.isNotBlank(user.getOffice().getId())) {
+		if (user.getOffice() != null && user.getOffice().getId() != null) {
 			dc.add(Restrictions.or(Restrictions.eq("office.id", user.getOffice().getId()),
 					Restrictions.like("office.parentIds", "%," + user.getOffice().getId() + ",%")));
 		}
@@ -85,7 +80,7 @@ public class SystemService extends BaseService {
 
 		dc.add(Restrictions.eq(User.FIELD_DEL_FLAG, User.DEL_FLAG_NORMAL));
 		if (!StringUtils.isNotEmpty(page.getOrderBy())) {
-			dc.addOrder(Order.asc("company.code")).addOrder(Order.asc("office.code")).addOrder(Order.desc("name"));
+			dc.addOrder(Order.asc("office.code")).addOrder(Order.desc("name"));
 		}
 
 		return userDao.find(page, dc);
@@ -116,30 +111,34 @@ public class SystemService extends BaseService {
 	}
 
 	@Transactional(readOnly = false)
-	public void deleteUser(String id) {
+	public void deleteUser(Integer id) {
 		userDao.deleteById(id);
 	}
 
 	@Transactional(readOnly = false)
-	public void updatePasswordById(String id, String loginName, String newPassword) {
+	public void updatePasswordById(Integer id, String loginName, String newPassword) {
 		userDao.updatePasswordById(entryptPassword(newPassword), id);
 		systemRealm.clearCachedAuthorizationInfo(loginName);
 	}
 
 	@Transactional(readOnly = false)
-	public void updateUserLoginInfo(String id) {
+	public void updateUserLoginInfo(Integer id) {
 		userDao.updateLoginInfo(SecurityUtils.getSubject().getSession().getHost(), new Date(), id);
 	}
 
 	/**
 	 * 生成安全的密码，生成随机的16位salt并经过1024次 sha-1 hash
+	 * 
+	 * public static String entryptPassword(String plainPassword) { byte[] salt
+	 * = Digests.generateSalt(SALT_SIZE); byte[] hashPassword =
+	 * Digests.sha1(plainPassword.getBytes(), salt, HASH_INTERATIONS); return
+	 * Encodes.encodeHex(salt) + Encodes.encodeHex(hashPassword); }
 	 */
-	public static String entryptPassword(String plainPassword) {
-		byte[] salt = Digests.generateSalt(SALT_SIZE);
-		byte[] hashPassword = Digests.sha1(plainPassword.getBytes(), salt, HASH_INTERATIONS);
-		return Encodes.encodeHex(salt) + Encodes.encodeHex(hashPassword);
-	}
 
+	public static String entryptPassword(String plainPassword) {
+		return DigestUtils.md5Hex(plainPassword);
+	}
+	
 	/**
 	 * 验证密码
 	 * 
@@ -156,8 +155,7 @@ public class SystemService extends BaseService {
 	}
 
 	// -- Role Service --//
-
-	public Role getRole(String id) {
+	public Role getRole(Integer id) {
 		return roleDao.get(id);
 	}
 
@@ -178,14 +176,14 @@ public class SystemService extends BaseService {
 	}
 
 	@Transactional(readOnly = false)
-	public void deleteRole(String id) {
+	public void deleteRole(Integer id) {
 		roleDao.deleteById(id);
 		systemRealm.clearAllCachedAuthorizationInfo();
 		UserUtils.removeCache(UserUtils.CACHE_ROLE_LIST);
 	}
 
 	@Transactional(readOnly = false)
-	public Boolean outUserInRole(Role role, String userId) {
+	public Boolean outUserInRole(Role role, Integer userId) {
 		User user = userDao.get(userId);
 		List<String> roleIds = user.getRoleIdList();
 		List<Role> roles = user.getRoleList();
@@ -199,7 +197,7 @@ public class SystemService extends BaseService {
 	}
 
 	@Transactional(readOnly = false)
-	public User assignUserToRole(Role role, String userId) {
+	public User assignUserToRole(Role role, Integer userId) {
 		User user = userDao.get(userId);
 		List<String> roleIds = user.getRoleIdList();
 		if (roleIds.contains(role.getId())) {
@@ -212,7 +210,7 @@ public class SystemService extends BaseService {
 
 	// -- Menu Service --//
 
-	public Menu getMenu(String id) {
+	public Menu getMenu(Integer id) {
 		return menuDao.get(id);
 	}
 
@@ -238,7 +236,7 @@ public class SystemService extends BaseService {
 	}
 
 	@Transactional(readOnly = false)
-	public void deleteMenu(String id) {
+	public void deleteMenu(Integer id) {
 		menuDao.deleteById(id, "%," + id + ",%");
 		systemRealm.clearAllCachedAuthorizationInfo();
 		UserUtils.removeCache(UserUtils.CACHE_MENU_LIST);

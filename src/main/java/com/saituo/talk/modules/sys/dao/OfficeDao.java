@@ -25,7 +25,4 @@ public class OfficeDao extends BaseDao<Office> {
 		return find("from Office where parentIds like :p1", new Parameter(parentIds));
 	}
 	
-//	@Query("from Office where (id=?1 or parent.id=?1 or parentIds like ?2) and delFlag='" + Office.DEL_FLAG_NORMAL + "' order by code")
-//	public List<Office> findAllChild(Long parentId, String likeParentIds);
-	
 }

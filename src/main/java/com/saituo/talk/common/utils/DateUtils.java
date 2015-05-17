@@ -9,14 +9,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 
 /**
  * 日期工具类, 继承org.apache.commons.lang.time.DateUtils类
  * @author ThinkGem
  * @version 2013-3-15
  */
-public class DateUtils extends org.apache.commons.lang.time.DateUtils {
+public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 	
 	private static String[] parsePatterns = { "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", 
 		"yyyy/MM/dd", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd HH:mm" };

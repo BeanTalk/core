@@ -19,7 +19,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.DynamicInsert;
@@ -68,7 +68,7 @@ public class Menu extends IdEntity<Menu> {
 		this.sort = 30;
 	}
 
-	public Menu(String id) {
+	public Menu(Integer id) {
 		this();
 		this.id = id;
 	}
@@ -205,16 +205,16 @@ public class Menu extends IdEntity<Menu> {
 	}
 
 	@Transient
-	public static void sortList(List<Menu> list, List<Menu> sourcelist, String parentId) {
+	public static void sortList(List<Menu> list, List<Menu> sourcelist, Integer parentId) {
 		for (int i = 0; i < sourcelist.size(); i++) {
 			Menu e = sourcelist.get(i);
-			if (e.getParent() != null && e.getParent().getId() != null && e.getParent().getId().equals(parentId)) {
+			if (e.getParent() != null && e.getParent().getId() != null && e.getParent().getId() == parentId) {
 				list.add(e);
 				// 判断是否还有子节点, 有则继续获取子节点
 				for (int j = 0; j < sourcelist.size(); j++) {
 					Menu child = sourcelist.get(j);
 					if (child.getParent() != null && child.getParent().getId() != null
-							&& child.getParent().getId().equals(e.getId())) {
+							&& child.getParent().getId() == e.getId()) {
 						sortList(list, sourcelist, e.getId());
 						break;
 					}
@@ -229,8 +229,8 @@ public class Menu extends IdEntity<Menu> {
 	}
 
 	@Transient
-	public static boolean isRoot(String id) {
-		return id != null && id.equals("1");
+	public static boolean isRoot(Integer id) {
+		return id == 1;
 	}
 
 	@Transient

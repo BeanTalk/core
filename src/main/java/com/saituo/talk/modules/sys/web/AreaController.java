@@ -46,7 +46,7 @@ public class AreaController extends BaseController {
 	@ModelAttribute("area")
 	public Area get(@RequestParam(required = false) String id) {
 		if (StringUtils.isNotBlank(id)) {
-			return areaService.get(id);
+			return areaService.get(Integer.valueOf(id));
 		} else {
 			return new Area();
 		}
@@ -57,7 +57,7 @@ public class AreaController extends BaseController {
 	public String list(Area area, Model model) {
 		// User user = UserUtils.getUser();
 		// if(user.isAdmin()){
-		area.setId("1");
+		area.setId(1);
 		// }else{
 		// area.setId(user.getArea().getId());
 		// }
@@ -82,8 +82,7 @@ public class AreaController extends BaseController {
 
 	@RequiresPermissions("sys:area:edit")
 	@RequestMapping(value = "save")
-	public String save(Area area, Model model,
-			RedirectAttributes redirectAttributes) {
+	public String save(Area area, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, area)) {
 			return form(area, model);
 		}
@@ -95,10 +94,10 @@ public class AreaController extends BaseController {
 	@RequiresPermissions("sys:area:edit")
 	@RequestMapping(value = "delete")
 	public String delete(String id, RedirectAttributes redirectAttributes) {
-		if (Area.isAdmin(id)) {
+		if (Area.isAdmin(Integer.valueOf(id))) {
 			addMessage(redirectAttributes, "删除区域失败, 不允许删除顶级区域或编号为空");
 		} else {
-			areaService.delete(id);
+			areaService.delete(Integer.valueOf(id));
 			addMessage(redirectAttributes, "删除区域成功");
 		}
 		return "redirect:" + Global.getAdminPath() + "/sys/area/";
@@ -107,9 +106,7 @@ public class AreaController extends BaseController {
 	@RequiresUser
 	@ResponseBody
 	@RequestMapping(value = "treeData")
-	public List<Map<String, Object>> treeData(
-			@RequestParam(required = false) String extId,
-			HttpServletResponse response) {
+	public List<Map<String, Object>> treeData(@RequestParam(required = false) String extId, HttpServletResponse response) {
 		response.setContentType("application/json; charset=UTF-8");
 		List<Map<String, Object>> mapList = Lists.newArrayList();
 		// User user = UserUtils.getUser();
@@ -117,15 +114,12 @@ public class AreaController extends BaseController {
 		for (int i = 0; i < list.size(); i++) {
 			Area e = list.get(i);
 			if (extId == null
-					|| (extId != null && !extId.equals(e.getId()) && e
-							.getParentIds().indexOf("," + extId + ",") == -1)) {
+					|| (extId != null && !extId.equals(e.getId()) && e.getParentIds().indexOf("," + extId + ",") == -1)) {
 				Map<String, Object> map = Maps.newHashMap();
 				map.put("id", e.getId());
 				// map.put("pId",
 				// !user.isAdmin()&&e.getId().equals(user.getArea().getId())?0:e.getParent()!=null?e.getParent().getId():0);
-				map.put("pId", e.getParent() != null
-						? e.getParent().getId()
-						: 0);
+				map.put("pId", e.getParent() != null ? e.getParent().getId() : 0);
 				map.put("name", e.getName());
 				mapList.add(map);
 			}

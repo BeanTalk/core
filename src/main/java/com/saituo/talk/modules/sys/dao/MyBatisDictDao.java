@@ -18,7 +18,7 @@ import com.saituo.talk.modules.sys.entity.Dict;
 @MyBatisDao
 public interface MyBatisDictDao {
 	
-    Dict get(String id);
+    Dict get(Integer id);
     
     List<Dict> find(Dict dict);
     

@@ -45,8 +45,7 @@ public class UserUtils extends BaseService {
 	private static RoleDao roleDao = SpringContextHolder.getBean(RoleDao.class);
 	private static MenuDao menuDao = SpringContextHolder.getBean(MenuDao.class);
 	private static AreaDao areaDao = SpringContextHolder.getBean(AreaDao.class);
-	private static OfficeDao officeDao = SpringContextHolder
-			.getBean(OfficeDao.class);
+	private static OfficeDao officeDao = SpringContextHolder.getBean(OfficeDao.class);
 
 	public static final String CACHE_USER = "user";
 	public static final String CACHE_ROLE_LIST = "roleList";
@@ -108,8 +107,8 @@ public class UserUtils extends BaseService {
 		}
 		return list;
 	}
-	
-	public static List<Menu> getSysMenuList(){
+
+	public static List<Menu> getSysMenuList() {
 		@SuppressWarnings("unchecked")
 		List<Menu> menuList = (List<Menu>) getCache(CACHE_SYS_MENU_LIST);
 		if (menuList == null) {
@@ -143,7 +142,7 @@ public class UserUtils extends BaseService {
 		@SuppressWarnings("unchecked")
 		List<Area> areaList = (List<Area>) getCache(CACHE_AREA_LIST);
 		if (areaList == null) {
-			 User user = getUser();
+			User user = getUser();
 			// if (user.isAdmin()){
 			areaList = areaDao.findAllList();
 			// }else{
@@ -168,8 +167,7 @@ public class UserUtils extends BaseService {
 			// }
 			DetachedCriteria dc = officeDao.createDetachedCriteria();
 			dc.add(dataScopeFilter(user, dc.getAlias(), ""));
-			dc.add(Restrictions.eq(Office.FIELD_DEL_FLAG,
-					Office.DEL_FLAG_NORMAL));
+			dc.add(Restrictions.eq(Office.FIELD_DEL_FLAG, Office.DEL_FLAG_NORMAL));
 			dc.addOrder(Order.asc("code"));
 			officeList = officeDao.find(dc);
 			putCache(CACHE_OFFICE_LIST, officeList);

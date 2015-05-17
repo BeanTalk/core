@@ -21,10 +21,6 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
-import org.apache.lucene.search.BooleanClause;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.QueryWrapperFilter;
-import org.apache.lucene.search.Sort;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -35,12 +31,6 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.internal.CriteriaImpl;
-import org.hibernate.search.FullTextQuery;
-import org.hibernate.search.FullTextSession;
-import org.hibernate.search.Search;
-import org.hibernate.search.filter.impl.CachingWrapperFilter;
-import org.hibernate.search.query.DatabaseRetrievalMethod;
-import org.hibernate.search.query.ObjectLookupMethod;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -234,7 +224,8 @@ public class BaseDao<T> {
 				}
 			}
 			// 插入前执行方法
-			if (StringUtils.isBlank((String) id)) {
+			Integer idTemp = (Integer) id;
+			if (idTemp == null) {
 				for (Method method : entity.getClass().getMethods()) {
 					PrePersist pp = method.getAnnotation(PrePersist.class);
 					if (pp != null) {
@@ -296,6 +287,16 @@ public class BaseDao<T> {
 	}
 
 	/**
+	 * 更新数据
+	 * 
+	 * @param entity
+	 * @return
+	 */
+	public void update(T entity) {
+		getSession().update(entity);
+	}
+
+	/**
 	 * 逻辑删除
 	 * 
 	 * @param id
@@ -304,6 +305,17 @@ public class BaseDao<T> {
 	public int deleteById(Serializable id) {
 		return update("update " + entityClass.getSimpleName() + " set delFlag='" + BaseEntity.DEL_FLAG_DELETE
 				+ "' where id = :p1", new Parameter(id));
+	}
+
+	/**
+	 * 彻底删除
+	 * 
+	 * @param id
+	 * @return
+	 * @return
+	 */
+	public void deleteReal(T entity) {
+		getSession().delete(entity);
 	}
 
 	/**
@@ -691,78 +703,9 @@ public class BaseDao<T> {
 		return dc;
 	}
 
-	// -------------- Hibernate search --------------
-
-	/**
-	 * 获取全文Session
-	 */
-	public FullTextSession getFullTextSession() {
-		return Search.getFullTextSession(getSession());
-	}
-
-	/**
-	 * 建立索引
-	 */
-	public void createIndex() {
-		try {
-			getFullTextSession().createIndexer(entityClass).startAndWait();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * 全文检索
-	 * 
-	 * @param page
-	 *            分页对象
-	 * @param query
-	 *            关键字查询对象
-	 * @param queryFilter
-	 *            查询过滤对象
-	 * @param sort
-	 *            排序对象
-	 * @return 分页对象
-	 */
-	@SuppressWarnings("unchecked")
-	public Page<T> search(Page<T> page, BooleanQuery query, BooleanQuery queryFilter, Sort sort) {
-
-		// 按关键字查询
-		FullTextQuery fullTextQuery = getFullTextSession().createFullTextQuery(query, entityClass);
-
-		// 过滤无效的内容
-		if (queryFilter != null) {
-			fullTextQuery.setFilter(new CachingWrapperFilter(new QueryWrapperFilter(queryFilter)));
-		}
-
-		// 设置排序
-		if (sort != null) {
-			fullTextQuery.setSort(sort);
-		}
-
-		// 定义分页
-		page.setCount(fullTextQuery.getResultSize());
-		fullTextQuery.setFirstResult(page.getFirstResult());
-		fullTextQuery.setMaxResults(page.getMaxResults());
-
-		// 先从持久化上下文中查找对象，如果没有再从二级缓存中查找
-		fullTextQuery.initializeObjectsWith(ObjectLookupMethod.SECOND_LEVEL_CACHE, DatabaseRetrievalMethod.QUERY);
-
-		// 返回结果
-		page.setList(fullTextQuery.list());
-
-		return page;
-	}
-
-	/**
-	 * 获取全文查询对象
-	 */
-	public BooleanQuery getFullTextQuery(BooleanClause... booleanClauses) {
-		BooleanQuery booleanQuery = new BooleanQuery();
-		for (BooleanClause booleanClause : booleanClauses) {
-			booleanQuery.add(booleanClause);
-		}
-		return booleanQuery;
+	public void createNativeQuery(String sql) {
+		Query query = getSession().createSQLQuery(sql);
+		query.executeUpdate();
 	}
 
 }

@@ -53,16 +53,13 @@ import com.saituo.talk.common.utils.excel.fieldtype.RoleListType;
 public class User extends IdEntity<User> {
 
 	private static final long serialVersionUID = 1L;
-	private Office company; // 归属公司
 	private Office office; // 归属部门
 	private String loginName;// 登录名
 	private String password;// 密码
-	private String no; // 工号
 	private String name; // 姓名
 	private String email; // 邮箱
 	private String phone; // 电话
 	private String mobile; // 手机
-	private String userType;// 用户类型
 	private String userCatagory; // 用户类别
 	private String loginIp; // 最后登陆IP
 	private Date loginDate; // 最后登陆日期
@@ -75,23 +72,9 @@ public class User extends IdEntity<User> {
 		super();
 	}
 
-	public User(String id) {
+	public User(Integer id) {
 		this();
 		this.id = id;
-	}
-
-	@ManyToOne
-	@JoinColumn(name = "company_id")
-	@NotFound(action = NotFoundAction.IGNORE)
-	@JsonIgnore
-	@NotNull(message = "归属公司不能为空")
-	@ExcelField(title = "归属公司", align = 2, sort = 20)
-	public Office getCompany() {
-		return company;
-	}
-
-	public void setCompany(Office company) {
-		this.company = company;
 	}
 
 	@ManyToOne
@@ -142,16 +125,6 @@ public class User extends IdEntity<User> {
 		return name;
 	}
 
-	@Length(min = 1, max = 100)
-	@ExcelField(title = "工号", align = 2, sort = 45)
-	public String getNo() {
-		return no;
-	}
-
-	public void setNo(String no) {
-		this.no = no;
-	}
-
 	public String getForward() {
 		return forward;
 	}
@@ -199,16 +172,6 @@ public class User extends IdEntity<User> {
 	@ExcelField(title = "备注", align = 1, sort = 900)
 	public String getRemarks() {
 		return remarks;
-	}
-
-	@Length(min = 0, max = 100)
-	@ExcelField(title = "用户类型", align = 2, sort = 80, dictType = "sys_user_type")
-	public String getUserType() {
-		return userType;
-	}
-
-	public void setUserType(String userType) {
-		this.userType = userType;
 	}
 
 	@Length(min = 0, max = 100)
@@ -268,15 +231,15 @@ public class User extends IdEntity<User> {
 	public List<String> getRoleIdList() {
 		List<String> roleIdList = Lists.newArrayList();
 		for (Role role : roleList) {
-			roleIdList.add(role.getId());
+			roleIdList.add(String.valueOf(role.getId()));
 		}
 		return roleIdList;
 	}
 
 	@Transient
-	public void setRoleIdList(List<String> roleIdList) {
+	public void setRoleIdList(List<Integer> roleIdList) {
 		roleList = Lists.newArrayList();
-		for (String roleId : roleIdList) {
+		for (Integer roleId : roleIdList) {
 			Role role = new Role();
 			role.setId(roleId);
 			roleList.add(role);
@@ -297,12 +260,8 @@ public class User extends IdEntity<User> {
 	}
 
 	@Transient
-	public static boolean isAdmin(String id) {
-		return id != null && id.equals("1");
+	public static boolean isAdmin(Integer id) {
+		return id == 1;
 	}
 
-	// @Override
-	// public String toString() {
-	// return ToStringBuilder.reflectionToString(this);
-	// }
 }

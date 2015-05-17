@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-	<title>机构管理</title>
+	<title>组织管理</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -13,7 +13,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/sys/office/">机构列表</a></li>
+		<li><a href="${ctx}/sys/office/">组织列表</a></li>
 		<li class="active"><a href="${ctx}/sys/office/form?id=${office.id}&parent.id=${office.parent.id}">机构<shiro:hasPermission name="sys:office:edit">${not empty office.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="sys:office:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	
@@ -22,7 +22,7 @@
 		<tags:message content="${message}"/>
 		
 		<div class="control-group">
-			<label class="control-label">上级机构:</label>
+			<label class="control-label">上级组织:</label>
 			<div class="controls">
                 <tags:treeselect id="office" name="parent.id" value="${office.parent.id}" labelName="parent.name" labelValue="${office.parent.name}"
 					title="机构" url="/sys/office/treeData" extId="${office.id}" cssClass="required"/>
@@ -36,19 +36,13 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label" for="name">机构名称:</label>
+			<label class="control-label" for="name">组名称:</label>
 			<div class="controls">
 				<form:input path="name" htmlEscape="false" maxlength="50" class="required"/>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label" for="code">机构编码:</label>
-			<div class="controls">
-				<form:input path="code" htmlEscape="false" maxlength="50"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="type">机构类型:</label>
+		<div class="control-group" style="display: none">
+			<label class="control-label" for="type">组类型:</label>
 			<div class="controls">
 				<form:select path="type">
 					<form:options items="${fns:getDictList('sys_office_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
@@ -56,10 +50,10 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label" for="grade">机构级别:</label>
+			<label class="control-label" for="ifShow">是否显示下拉框:</label>
 			<div class="controls">
-				<form:select path="grade">
-					<form:options items="${fns:getDictList('sys_office_grade')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				<form:select path="ifShow">
+					<form:options items="${fns:getDictList('show_hide')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</div>
 		</div>

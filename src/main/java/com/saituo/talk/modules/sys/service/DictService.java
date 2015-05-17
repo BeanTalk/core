@@ -76,7 +76,7 @@ public class DictService extends BaseService {
 	}
 
 	@Transactional(readOnly = false)
-	public void delete(String id) {
+	public void delete(Integer id) {
 		dictDao.deleteById(id);
 		CacheUtils.remove(DictUtils.CACHE_DICT_MAP);
 	}

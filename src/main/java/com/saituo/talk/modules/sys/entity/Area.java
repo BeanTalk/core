@@ -53,14 +53,26 @@ public class Area extends IdEntity<Area> {
 
 	private List<Office> officeList = Lists.newArrayList(); // 部门列表
 	private List<Area> childList = Lists.newArrayList(); // 拥有子区域列表
+	private List<Gift> giftList = Lists.newArrayList(); // 拥有的礼品列表
 
 	public Area() {
 		super();
 	}
 
-	public Area(String id) {
+	public Area(Integer id) {
 		this();
 		this.id = id;
+	}
+
+	@OneToMany(mappedBy = "area", fetch = FetchType.LAZY)
+	@Where(clause = "del_flag='" + DEL_FLAG_NORMAL + "'")
+	@NotFound(action = NotFoundAction.IGNORE)
+	public List<Gift> getGiftList() {
+		return giftList;
+	}
+
+	public void setGiftList(List<Gift> giftList) {
+		this.giftList = giftList;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -140,19 +152,16 @@ public class Area extends IdEntity<Area> {
 	}
 
 	@Transient
-	public static void sortList(List<Area> list, List<Area> sourcelist,
-			String parentId) {
+	public static void sortList(List<Area> list, List<Area> sourcelist, Integer parentId) {
 		for (int i = 0; i < sourcelist.size(); i++) {
 			Area e = sourcelist.get(i);
-			if (e.getParent() != null && e.getParent().getId() != null
-					&& e.getParent().getId().equals(parentId)) {
+			if (e.getParent() != null && e.getParent().getId() != null && e.getParent().getId() == parentId) {
 				list.add(e);
 				// 判断是否还有子节点, 有则继续获取子节点
 				for (int j = 0; j < sourcelist.size(); j++) {
 					Area childe = sourcelist.get(j);
-					if (childe.getParent() != null
-							&& childe.getParent().getId() != null
-							&& childe.getParent().getId().equals(e.getId())) {
+					if (childe.getParent() != null && childe.getParent().getId() != null
+							&& childe.getParent().getId() == e.getId()) {
 						sortList(list, sourcelist, e.getId());
 						break;
 					}
@@ -167,7 +176,7 @@ public class Area extends IdEntity<Area> {
 	}
 
 	@Transient
-	public static boolean isAdmin(String id) {
-		return id != null && id.equals("1");
+	public static boolean isAdmin(Integer id) {
+		return id == 1;
 	}
 }

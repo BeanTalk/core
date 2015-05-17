@@ -124,6 +124,25 @@
 			<type>jar</type>
 		</dependency>
 
+		<!-- lucene -->
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers-common</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-queryparser</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+
 		<!-- SPRING begin -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -223,11 +242,7 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>${hibernate-validator.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-search</artifactId>
-			<version>${hibernate-search.version}</version>
-		</dependency>
+		
 		<!-- MyBatis -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
@@ -310,11 +325,11 @@
 			<artifactId>ehcache-core</artifactId>
 			<version>${ehcache.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache-web</artifactId>
-			<version>2.0.4</version>
+			<version>2.0.1</version>
 		</dependency>
 		<!-- EHCACHE end -->
 
@@ -471,7 +486,7 @@
 			<artifactId>mail</artifactId>
 			<version>1.4.7</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.activation</groupId>
 			<artifactId>activation</artifactId>
@@ -484,13 +499,13 @@
 			<artifactId>poi</artifactId>
 			<version>${poi.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>${poi.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml-schemas</artifactId>
@@ -555,18 +570,6 @@
 	<build>
 		<outputDirectory>${project.basedir}/src/main/webapp/WEB-INF/classes/</outputDirectory>
 		<plugins>
-			<!-- Compiler 插件, 设定JDK版本 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.5.1</version>
-				<configuration>
-					<source>${jdk.version}</source>
-					<target>${jdk.version}</target>
-					<showWarnings>true</showWarnings>
-				</configuration>
-			</plugin>
-
 			<!-- war 打包插件, 设定war包名称不带版本号 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

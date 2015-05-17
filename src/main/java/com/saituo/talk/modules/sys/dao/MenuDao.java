@@ -41,14 +41,14 @@ public class MenuDao extends BaseDao<Menu> {
 				Dict.DEL_FLAG_NORMAL));
 	}
 
-	public List<Menu> findByUserId(String userId) {
+	public List<Menu> findByUserId(Integer userId) {
 		return find(
 				"select distinct m from Menu m, Role r, User u where m in elements (r.menuList) and r in elements (u.roleList)"
 						+ " and m.module=:p1 and m.delFlag=:p2 and r.delFlag=:p2 and u.delFlag=:p2 and u.id=:p3"
 						+ " order by m.sort", new Parameter(Dict.SYS_MODULE, Menu.DEL_FLAG_NORMAL, userId));
 	}
 
-	public List<Menu> findAllActivitiList(String userId) {
+	public List<Menu> findAllActivitiList(Integer userId) {
 		return find(
 				"select distinct m from Menu m, Role r, User u where m in elements (r.menuList) and r in elements (u.roleList)"
 						+ " and m.module=:p1 and m.delFlag=:p2 and r.delFlag=:p2 and u.delFlag=:p2 and u.id=:p3 order by m.sort",
